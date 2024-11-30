@@ -6,14 +6,20 @@ const QuestionPanel = ({ id, query, context, response, onSubmit, onSkip }) => {
   const [faithfulness, setFaithfulness] = useState(undefined);
   const [relevance, setRelevance] = useState(undefined);
   const [comments, setComments] = useState("");
+  const [showError, setShowError] = useState(false);
 
   const resetFields = () => {
     setFaithfulness(undefined);
     setRelevance(undefined);
     setComments("");
+    setShowError(false);
   };
 
   const handleSubmit = () => {
+    if (faithfulness === undefined || relevance === undefined) {
+      setShowError(true);
+      return;
+    }
     const evaluation = { id, faithfulness, relevance, comments };
     onSubmit(evaluation);
     resetFields();
@@ -145,6 +151,14 @@ const QuestionPanel = ({ id, query, context, response, onSubmit, onSkip }) => {
             onChange={(e) => setComments(e.target.value)}
             sx={{ marginTop: "8px" }}
           />
+        </Box>
+
+        <Box>
+          {showError && (faithfulness === undefined || relevance === undefined) && (
+            <Typography color="error" sx={{ mt: 2, mb: 2 }}>
+              Please select both faithfulness and relevance before submitting
+            </Typography>
+          )}
         </Box>
       </Box>
 

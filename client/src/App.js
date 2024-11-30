@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import QuestionPanel from "./QuestionPanel";
-import { Container, Typography, Button, Box } from "@mui/material";
+import { Container, Typography, Button, Box, LinearProgress } from "@mui/material";
 import questionsData from "./tasks.json"; // Import the JSON file
 
 const App = () => {
@@ -33,6 +33,8 @@ const App = () => {
     return <Typography variant="h6">Loading questions...</Typography>;
   }
 
+  const progress = ((currentIndex + 1) / questions.length) * 100;
+
   return (
     <Container maxWidth="md">
       <Typography variant="h4" sx={{ margin: "16px 0" }}>
@@ -47,6 +49,17 @@ const App = () => {
         onSubmit={handleTaskSubmit}
         onSkip={handleTaskSkip}
       />
+
+      <Box sx={{ width: '100%', marginTop: '32px', marginBottom: '32px' }}>
+        <LinearProgress 
+          variant="determinate" 
+          value={progress}
+          sx={{ height: 10 }}
+        />
+        <Typography variant="body2" color="textSecondary" sx={{ textAlign: 'center', marginTop: '8px' }}>
+          {currentIndex + 1} / {questions.length}
+        </Typography>
+      </Box>
     </Container>
   );
 };

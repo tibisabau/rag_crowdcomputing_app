@@ -17,12 +17,6 @@ const App = () => {
     setQuestions(shuffledQuestions);
   }, []);
 
-  useEffect(() => {
-    if (faithfulness !== undefined && relevance !== undefined) {
-      setShowError(false);
-    }
-  }, [faithfulness, relevance]);
-
   const handleNext = () => {
     setCurrentIndex(currentIndex + 1);
   };
@@ -32,6 +26,20 @@ const App = () => {
     setRelevance(undefined);
     setComments("");
     setShowError(false);
+  };
+
+  const handleFaithfulnessChange = (value) => {
+    setFaithfulness(value);
+    if (value !== undefined && relevance !== undefined) {
+      setShowError(false);
+    }
+  };
+
+  const handleRelevanceChange = (value) => {
+    setRelevance(value);
+    if (faithfulness !== undefined && value !== undefined) {
+      setShowError(false);
+    }
   };
 
   const handleSubmit = () => {
@@ -52,6 +60,7 @@ const App = () => {
 
   const handleSkip = () => {
     resetFields();
+    setShowError(false);
     handleNext();
   };
 
@@ -122,14 +131,14 @@ const App = () => {
               <Typography sx={{ marginRight: "4px" }}>Faithfulness:</Typography>
               <Button
                 variant={faithfulness === 1 ? "contained" : "outlined"}
-                onClick={() => setFaithfulness(1)}
+                onClick={() => handleFaithfulnessChange(1)}
                 sx={{ marginRight: "4px" }}
               >
                 True
               </Button>
               <Button
                 variant={faithfulness === 0 ? "contained" : "outlined"}
-                onClick={() => setFaithfulness(0)}
+                onClick={() => handleFaithfulnessChange(0)}
               >
                 False
               </Button>
@@ -138,14 +147,14 @@ const App = () => {
               <Typography sx={{ marginRight: "4px" }}>Relevance:</Typography>
               <Button
                 variant={relevance === 1 ? "contained" : "outlined"}
-                onClick={() => setRelevance(1)}
+                onClick={() => handleRelevanceChange(1)}
                 sx={{ marginRight: "4px" }}
               >
                 True
               </Button>
               <Button
                 variant={relevance === 0 ? "contained" : "outlined"}
-                onClick={() => setRelevance(0)}
+                onClick={() => handleRelevanceChange(0)}
               >
                 False
               </Button>

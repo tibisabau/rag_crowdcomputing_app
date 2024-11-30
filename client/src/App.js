@@ -9,15 +9,12 @@ const App = () => {
   const [taskAnswers, setTaskAnswers] = useState([]);
 
   useEffect(() => {
-    // Shuffle and select 20 questions
-    const shuffledQuestions = questionsData.sort(() => Math.random() - 0.5).slice(0, 20);
+    const shuffledQuestions = questionsData.sort(() => Math.random() - 0.5).slice(0, 5);
     setQuestions(shuffledQuestions);
   }, []);
 
   const handleNext = () => {
-    if (currentIndex < questions.length - 1) {
-      setCurrentIndex(currentIndex + 1);
-    }
+    setCurrentIndex(currentIndex + 1);
   };
 
   const handleTaskSubmit = (evaluation) => {
@@ -29,8 +26,39 @@ const App = () => {
     handleNext();
   }
 
+  const downloadAnswers = () => {
+    const dataStr = JSON.stringify(taskAnswers, null, 2);
+    const blob = new Blob([dataStr], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.download = `survey_answers_${new Date().toISOString()}.json`;
+    link.href = url;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
   if (questions.length === 0) {
     return <Typography variant="h6">Loading questions...</Typography>;
+  }
+
+  // Show completion screen if we've gone through all questions
+  if (currentIndex >= questions.length) {
+    return (
+      <Container maxWidth="md">
+        <Box sx={{ textAlign: 'center', marginTop: '48px' }}>
+          <Typography variant="h4" sx={{ marginBottom: '24px' }}>
+            Thank you for completing the survey!
+          </Typography>
+          <Button 
+            variant="contained" 
+            color="primary"
+            onClick={downloadAnswers}
+          >
+            Finish Survey & Download Answers
+          </Button>
+        </Box>
+      </Container>
+    );
   }
 
   const progress = ((currentIndex + 1) / questions.length) * 100;
@@ -42,7 +70,7 @@ const App = () => {
       </Typography>
 
       <QuestionPanel
-        id={questions[currentIndex].id}
+        questionId={questions[currentIndex].id}
         query={questions[currentIndex].query}
         context={questions[currentIndex].context}
         response={questions[currentIndex].response}

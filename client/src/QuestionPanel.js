@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Box, Button, Typography, TextField, Divider } from "@mui/material";
 import ReactMarkdown from "react-markdown";
 
-const QuestionPanel = ({ id, query, context, response, onSubmit, onSkip }) => {
+const QuestionPanel = ({ questionId, query, context, response, onSubmit, onSkip }) => {
   const [faithfulness, setFaithfulness] = useState(undefined);
   const [relevance, setRelevance] = useState(undefined);
   const [comments, setComments] = useState("");
@@ -20,7 +20,7 @@ const QuestionPanel = ({ id, query, context, response, onSubmit, onSkip }) => {
       setShowError(true);
       return;
     }
-    const evaluation = { id, faithfulness, relevance, comments };
+    const evaluation = { questionId, faithfulness, relevance, comments };
     onSubmit(evaluation);
     resetFields();
   };

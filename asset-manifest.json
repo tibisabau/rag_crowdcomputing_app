@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/rag_crowdcomputing_app/static/css/main.e6c13ad2.css",
+    "main.js": "/rag_crowdcomputing_app/static/js/main.675270bb.js",
+    "static/js/453.419a5d54.chunk.js": "/rag_crowdcomputing_app/static/js/453.419a5d54.chunk.js",
+    "index.html": "/rag_crowdcomputing_app/index.html",
+    "main.e6c13ad2.css.map": "/rag_crowdcomputing_app/static/css/main.e6c13ad2.css.map",
+    "main.675270bb.js.map": "/rag_crowdcomputing_app/static/js/main.675270bb.js.map",
+    "453.419a5d54.chunk.js.map": "/rag_crowdcomputing_app/static/js/453.419a5d54.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e6c13ad2.css",
+    "static/js/main.675270bb.js"
+  ]
+}

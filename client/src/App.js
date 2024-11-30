@@ -1,30 +1,59 @@
 import React, { useState, useEffect } from "react";
 import QuestionPanel from "./QuestionPanel";
-import { Container, Typography, Button, Box, LinearProgress } from "@mui/material";
+import { Container, Typography, Button, Box, LinearProgress, TextField } from "@mui/material";
 import questionsData from "./tasks.json"; // Import the JSON file
 
 const App = () => {
   const [questions, setQuestions] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [taskAnswers, setTaskAnswers] = useState([]);
+  const [faithfulness, setFaithfulness] = useState(undefined);
+  const [relevance, setRelevance] = useState(undefined);
+  const [comments, setComments] = useState("");
+  const [showError, setShowError] = useState(false);
 
   useEffect(() => {
     const shuffledQuestions = questionsData.sort(() => Math.random() - 0.5).slice(0, 5);
     setQuestions(shuffledQuestions);
   }, []);
 
+  useEffect(() => {
+    if (faithfulness !== undefined && relevance !== undefined) {
+      setShowError(false);
+    }
+  }, [faithfulness, relevance]);
+
   const handleNext = () => {
     setCurrentIndex(currentIndex + 1);
   };
 
-  const handleTaskSubmit = (evaluation) => {
+  const resetFields = () => {
+    setFaithfulness(undefined);
+    setRelevance(undefined);
+    setComments("");
+    setShowError(false);
+  };
+
+  const handleSubmit = () => {
+    if (faithfulness === undefined || relevance === undefined) {
+      setShowError(true);
+      return;
+    }
+    const evaluation = {
+      questionId: questions[currentIndex].id,
+      faithfulness,
+      relevance,
+      comments,
+    };
     setTaskAnswers((prev) => [...prev, evaluation]);
+    resetFields();
     handleNext();
   };
 
-  const handleTaskSkip = () => {
+  const handleSkip = () => {
+    resetFields();
     handleNext();
-  }
+  };
 
   const downloadAnswers = () => {
     const dataStr = JSON.stringify(taskAnswers, null, 2);
@@ -41,7 +70,6 @@ const App = () => {
     return <Typography variant="h6">Loading questions...</Typography>;
   }
 
-  // Show completion screen if we've gone through all questions
   if (currentIndex >= questions.length) {
     return (
       <Container maxWidth="md">
@@ -54,7 +82,7 @@ const App = () => {
             color="primary"
             onClick={downloadAnswers}
           >
-            Finish Survey & Download Answers
+            Finish Survey
           </Button>
         </Box>
       </Container>
@@ -65,28 +93,131 @@ const App = () => {
 
   return (
     <Container maxWidth="md">
-      <Typography variant="h4" sx={{ margin: "16px 0" }}>
-        RAG Evaluation Tasks
-      </Typography>
+      {/* Fixed Header */}
+      <Box
+        sx={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          backgroundColor: "#fff",
+          zIndex: 1000,
+          borderBottom: "1px solid #ddd",
+          padding: "8px",
+          boxSizing: "border-box",
+        }}
+      >
+        {/* Task Evaluation Section */}
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "flex-start",
+            marginLeft: "16px",
+            marginRight: "16px", // Add right margin
+          }}
+        >
+          {/* Faithfulness and Relevance Buttons arranged horizontally */}
+          <Box sx={{ display: "flex", flexDirection: "column", marginRight: "8px" }}>
+            <Box sx={{ display: "flex", alignItems: "center", marginBottom: "4px" }}>
+              <Typography sx={{ marginRight: "4px" }}>Faithfulness:</Typography>
+              <Button
+                variant={faithfulness === 1 ? "contained" : "outlined"}
+                onClick={() => setFaithfulness(1)}
+                sx={{ marginRight: "4px" }}
+              >
+                True
+              </Button>
+              <Button
+                variant={faithfulness === 0 ? "contained" : "outlined"}
+                onClick={() => setFaithfulness(0)}
+              >
+                False
+              </Button>
+            </Box>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Typography sx={{ marginRight: "4px" }}>Relevance:</Typography>
+              <Button
+                variant={relevance === 1 ? "contained" : "outlined"}
+                onClick={() => setRelevance(1)}
+                sx={{ marginRight: "4px" }}
+              >
+                True
+              </Button>
+              <Button
+                variant={relevance === 0 ? "contained" : "outlined"}
+                onClick={() => setRelevance(0)}
+              >
+                False
+              </Button>
+            </Box>
+          </Box>
 
-      <QuestionPanel
-        questionId={questions[currentIndex].id}
-        query={questions[currentIndex].query}
-        context={questions[currentIndex].context}
-        response={questions[currentIndex].response}
-        onSubmit={handleTaskSubmit}
-        onSkip={handleTaskSkip}
-      />
+          {/* Comments Field filling remaining vertical space */}
+          <Box sx={{ flexGrow: 1, marginRight: "8px" }}>
+            <TextField
+              label="Comments (optional)"
+              multiline
+              rows={2}
+              fullWidth
+              variant="outlined"
+              value={comments}
+              onChange={(e) => setComments(e.target.value)}
+            />
+          </Box>
 
-      <Box sx={{ width: '100%', marginTop: '32px', marginBottom: '32px' }}>
-        <LinearProgress 
-          variant="determinate" 
-          value={progress}
-          sx={{ height: 10 }}
+          {/* Skip and Submit Buttons Stacked Vertically */}
+          <Box sx={{ display: "flex", flexDirection: "column" }}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleSkip}
+              sx={{ marginBottom: "4px" }}
+            >
+              Skip Task
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleSubmit}
+            >
+              Submit Task
+            </Button>
+          </Box>
+        </Box>
+
+        {/* Progress Bar with Numerical Counter */}
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            marginTop: "8px",
+            marginLeft: "16px",
+            marginRight: "16px", // Add right margin
+          }}
+        >
+          <Typography variant="body2" sx={{ marginRight: "8px" }}>
+            {currentIndex + 1} / {questions.length}
+          </Typography>
+          <Box sx={{ flexGrow: 1 }}>
+            <LinearProgress variant="determinate" value={progress} sx={{ height: 8 }} />
+          </Box>
+        </Box>
+
+        {/* Error Message */}
+        {showError && (
+          <Typography color="error" sx={{ mt: 1 }}>
+            Please select both faithfulness and relevance before submitting
+          </Typography>
+        )}
+      </Box>
+
+      {/* Main Content */}
+      <Box>
+        <QuestionPanel
+          query={questions[currentIndex].query}
+          context={questions[currentIndex].context}
+          response={questions[currentIndex].response}
         />
-        <Typography variant="body2" color="textSecondary" sx={{ textAlign: 'center', marginTop: '8px' }}>
-          {currentIndex + 1} / {questions.length}
-        </Typography>
       </Box>
     </Container>
   );

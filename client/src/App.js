@@ -91,7 +91,7 @@ const App = () => {
             color="primary"
             onClick={downloadAnswers}
           >
-            Finish Survey
+            Download Responses
           </Button>
         </Box>
       </Container>

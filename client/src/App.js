@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import QuestionPanel from "./QuestionPanel";
 import { Container, Typography, Button, Box } from "@mui/material";
-import questionsData from "./responses.json"; // Import the JSON file
+import questionsData from "./tasks.json"; // Import the JSON file
 
 const App = () => {
   const [questions, setQuestions] = useState([]);
@@ -48,9 +48,9 @@ const App = () => {
       </Typography>
 
       <QuestionPanel
-        query={questions[currentIndex].Query}
-        context={questions[currentIndex].Source}
-        response={questions[currentIndex].Response}
+        query={questions[currentIndex].query}
+        context={questions[currentIndex].context}
+        response={questions[currentIndex].response}
         onSubmit={handleTaskSubmit}
         initialData={getTaskAnswer()}
       />

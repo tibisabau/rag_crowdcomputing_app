@@ -2,14 +2,26 @@ import React, { useState } from "react";
 import { Box, Button, Typography, TextField, Divider } from "@mui/material";
 import ReactMarkdown from "react-markdown";
 
-const QuestionPanel = ({ query, context, response, onSubmit, initialData }) => {
-  const [faithfulness, setFaithfulness] = useState(initialData.faithfulness || "Not sure");
-  const [relevance, setRelevance] = useState(initialData.relevance || "Not sure");
-  const [comments, setComments] = useState(initialData.comments || "");
+const QuestionPanel = ({ id, query, context, response, onSubmit, onSkip }) => {
+  const [faithfulness, setFaithfulness] = useState(undefined);
+  const [relevance, setRelevance] = useState(undefined);
+  const [comments, setComments] = useState("");
+
+  const resetFields = () => {
+    setFaithfulness(undefined);
+    setRelevance(undefined);
+    setComments("");
+  };
 
   const handleSubmit = () => {
-    const task = { faithfulness, relevance, comments };
-    onSubmit(task);
+    const evaluation = { id, faithfulness, relevance, comments };
+    onSubmit(evaluation);
+    resetFields();
+  };
+
+  const handleSkip = () => {
+    onSkip();
+    resetFields();
   };
 
   return (
@@ -89,48 +101,36 @@ const QuestionPanel = ({ query, context, response, onSubmit, initialData }) => {
         <Box sx={{ marginBottom: "8px" }}>
           <Typography>Faithfulness:</Typography>
           <Button
-            variant={faithfulness === "True" ? "contained" : "outlined"}
-            onClick={() => setFaithfulness("True")}
+            variant={faithfulness === 1 ? "contained" : "outlined"}
+            onClick={() => setFaithfulness(1)}
             sx={{ marginRight: "8px" }}
           >
             True
           </Button>
           <Button
-            variant={faithfulness === "False" ? "contained" : "outlined"}
-            onClick={() => setFaithfulness("False")}
+            variant={faithfulness === 0 ? "contained" : "outlined"}
+            onClick={() => setFaithfulness(0)}
             sx={{ marginRight: "8px" }}
           >
             False
-          </Button>
-          <Button
-            variant={faithfulness === "Not sure" ? "contained" : "outlined"}
-            onClick={() => setFaithfulness("Not sure")}
-          >
-            Not sure
           </Button>
         </Box>
 
         <Box sx={{ marginBottom: "8px" }}>
           <Typography>Relevance:</Typography>
           <Button
-            variant={relevance === "True" ? "contained" : "outlined"}
-            onClick={() => setRelevance("True")}
+            variant={relevance === 1 ? "contained" : "outlined"}
+            onClick={() => setRelevance(1)}
             sx={{ marginRight: "8px" }}
           >
             True
           </Button>
           <Button
-            variant={relevance === "False" ? "contained" : "outlined"}
-            onClick={() => setRelevance("False")}
+            variant={relevance === 0 ? "contained" : "outlined"}
+            onClick={() => setRelevance(0)}
             sx={{ marginRight: "8px" }}
           >
             False
-          </Button>
-          <Button
-            variant={relevance === "Not sure" ? "contained" : "outlined"}
-            onClick={() => setRelevance("Not sure")}
-          >
-            Not sure
           </Button>
         </Box>
 
@@ -150,14 +150,23 @@ const QuestionPanel = ({ query, context, response, onSubmit, initialData }) => {
 
       <Divider sx={{ margin: "16px 0" }} />
 
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={handleSubmit}
-        sx={{ display: "block", margin: "0 auto", marginTop: "16px" }}
-      >
-        Submit Task
-      </Button>
+      <Box sx={{ display: "flex", justifyContent: "center", gap: "16px", marginTop: "16px" }}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleSkip}
+        >
+          Skip Task
+        </Button>
+
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleSubmit}
+        >
+          Submit Task
+        </Button>
+      </Box>
     </Box>
   );
 };

@@ -6,7 +6,7 @@ import questionsData from "./tasks.json"; // Import the JSON file
 const App = () => {
   const [questions, setQuestions] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [taskAnswers, setTaskAnswers] = useState({});
+  const [taskAnswers, setTaskAnswers] = useState([]);
 
   useEffect(() => {
     // Shuffle and select 20 questions
@@ -20,22 +20,14 @@ const App = () => {
     }
   };
 
-  const handlePrevious = () => {
-    if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
-    }
+  const handleTaskSubmit = (evaluation) => {
+    setTaskAnswers((prev) => [...prev, evaluation]);
+    handleNext();
   };
 
-  const handleTaskSubmit = (task) => {
-    setTaskAnswers((prev) => ({
-      ...prev,
-      [currentIndex]: task,
-    }));
-  };
-
-  const getTaskAnswer = () => {
-    return taskAnswers[currentIndex] || {};
-  };
+  const handleTaskSkip = () => {
+    handleNext();
+  }
 
   if (questions.length === 0) {
     return <Typography variant="h6">Loading questions...</Typography>;
@@ -48,31 +40,13 @@ const App = () => {
       </Typography>
 
       <QuestionPanel
+        id={questions[currentIndex].id}
         query={questions[currentIndex].query}
         context={questions[currentIndex].context}
         response={questions[currentIndex].response}
         onSubmit={handleTaskSubmit}
-        initialData={getTaskAnswer()}
+        onSkip={handleTaskSkip}
       />
-
-      <Box sx={{ display: "flex", justifyContent: "space-between", marginTop: "16px" }}>
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={handlePrevious}
-          disabled={currentIndex === 0}
-        >
-          Previous
-        </Button>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleNext}
-          disabled={currentIndex === questions.length - 1}
-        >
-          Next
-        </Button>
-      </Box>
     </Container>
   );
 };

@@ -121,8 +121,8 @@ const App = () => {
           sx={{
             display: "flex",
             alignItems: "flex-start",
-            marginLeft: "16px",
-            marginRight: "16px", // Add right margin
+            marginLeft: "10%",
+            marginRight: "10%",
           }}
         >
           {/* Faithfulness and Relevance Buttons arranged horizontally */}
@@ -200,8 +200,8 @@ const App = () => {
             display: "flex",
             alignItems: "center",
             marginTop: "8px",
-            marginLeft: "16px",
-            marginRight: "16px", // Add right margin
+            marginLeft: "10%",
+            marginRight: "10%",
           }}
         >
           <Typography variant="body2" sx={{ marginRight: "8px" }}>
@@ -214,9 +214,11 @@ const App = () => {
 
         {/* Error Message */}
         {showError && (
-          <Typography color="error" sx={{ mt: 1 }}>
-            Please select both faithfulness and relevance before submitting
-          </Typography>
+          <Box display="flex" justifyContent="center" alignItems="center">
+            <Typography color="error" sx={{ mt: 1 }}>
+              Please select both faithfulness and relevance before submitting
+            </Typography>
+          </Box>
         )}
       </Box>
 

@@ -6,9 +6,8 @@ const QuestionPanel = ({ query, context, response }) => {
   return (
     <Box
       sx={{
-        padding: "2%",
+        padding: "2px",
         backgroundColor: "#f9f9f9",
-        width: "100%",
       }}
     >
       {/* Query Section */}

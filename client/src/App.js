@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import QuestionPanel from "./QuestionPanel";
 import { Container, Typography, Button, Box, LinearProgress, TextField } from "@mui/material";
 import questionsData from "./tasks.json";
+import './App.css';
 
 const App = () => {
   const [questions, setQuestions] = useState([]);
@@ -89,7 +90,9 @@ const App = () => {
           height: "100vh",
         }}
       >
-        <Typography variant="h4" sx={{ marginBottom: "3vh" }}>
+        <Typography variant="h4" 
+        sx={{ marginBottom: "3vh" }}
+        >
           Thank you for completing the survey!
         </Typography>
         <Button variant="contained" color="primary" onClick={downloadAnswers}>
@@ -102,164 +105,163 @@ const App = () => {
   const progress = ((currentIndex + 1) / questions.length) * 100;
 
   return (
-    <Container
-      maxWidth="lg"
-      sx={{ display: "flex", flexDirection: "column", alignItems: "center", height: "100vh" }}
-    >
-      {/* Centered Question Panel */}
-      <Box sx={{ width: "75%", marginBottom: "5vh" }}>
-        <QuestionPanel
-          query={questions[currentIndex].query}
-          context={questions[currentIndex].context}
-          response={questions[currentIndex].response}
-        />
-      </Box>
-
-      {/* Task Evaluation Box */}
-      <Box
-        sx={{
-          position: "fixed",
-          // top: "50%",
-          right: "0%",
-          // transform: "translateY(-50%)",
-          width: "25%",
-          backgroundColor: "#ffffff",
-          border: "0.5vh solid #f9f9f9",
-          borderRadius: "1px",
-          // backgroundColor: "#f9f9f9",
-          padding: "2vh",
-          boxSizing: "border-box",
-          boxShadow: "0px 1px 2px rgba(0, 0, 0, 0.1)",
-          margin: "0px",
-          textAlign: "center", // Center title and content
-        }}
-      >
-        <Typography variant="h6" sx={{ fontWeight: "bold", marginBottom: "2vh" }}>
-          Task Evaluation
-        </Typography>
-
-        {/* True/False Buttons for Faithfulness */}
-        <Typography variant="body1" sx={{ marginBottom: "10px" }}>
-          Do you think the response is faithful?
-        </Typography>
+    <body>
+    <div class="sidebar">
+      {/* Task Evaluation Sidebar */}
         <Box
           sx={{
-            display: "flex",
-            justifyContent: "center", // Center buttons
-            gap: "10px",
-            marginBottom: "10px",
+            backgroundColor: "#ffffff",
+            padding: "20px",
+            border: "1px solid #f0f0f0",
+            borderRadius: "8px",
+            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
           }}
         >
-          <Button
-            variant={inputs.isFaithful === true ? "contained" : "outlined"}
-            color="primary"
-            onClick={() => handleInputChange("isFaithful", true)}
-          >
-            True
-          </Button>
-          <Button
-            variant={inputs.isFaithful === false ? "contained" : "outlined"}
-            color="primary"
-            onClick={() => handleInputChange("isFaithful", false)}
-          >
-            False
-          </Button>
-        </Box>
-
-        {/* True/False Buttons for Relevance */}
-        <Typography variant="body1" sx={{ marginBottom: "10px" }}>
-          Do you think the response is relevant?
-        </Typography>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center", // Center buttons
-            gap: "10px",
-            marginBottom: "20px",
-          }}
-        >
-          <Button
-            variant={inputs.isRelevant === true ? "contained" : "outlined"}
-            color="primary"
-            onClick={() => handleInputChange("isRelevant", true)}
-          >
-            True
-          </Button>
-          <Button
-            variant={inputs.isRelevant === false ? "contained" : "outlined"}
-            color="primary"
-            onClick={() => handleInputChange("isRelevant", false)}
-          >
-            False
-          </Button>
-        </Box>
-
-        {/* Faithfulness Input */}
-        <Box sx={{ marginBottom: "20px" }}>
-          <TextField
-            label="Reasoning for Faithfulness Rating"
-            placeholder="Copy-paste the piece of text from the response that supports your faithfulness rating"
-            multiline
-            rows={4}
-            fullWidth
-            variant="outlined"
-            value={inputs.faithfulness}
-            onChange={(e) => handleInputChange("faithfulness", e.target.value)}
-          />
-        </Box>
-
-        {/* Relevance Input */}
-        <Box sx={{ marginBottom: "20px" }}>
-          <TextField
-            label="Reasoning for Relevance Rating"
-            placeholder="Copy-paste the piece of text from the response that supports your relevance rating"
-            multiline
-            rows={4}
-            fullWidth
-            variant="outlined"
-            value={inputs.relevance}
-            onChange={(e) => handleInputChange("relevance", e.target.value)}
-          />
-        </Box>
-
-        {/* Comments Input */}
-        <Box sx={{ marginBottom: "20px" }}>
-          <TextField
-            label="Comments (optional)"
-            multiline
-            rows={5}
-            fullWidth
-            variant="outlined"
-            value={inputs.comments}
-            onChange={(e) => handleInputChange("comments", e.target.value)}
-          />
-        </Box>
-
-        {/* Buttons */}
-        <Box sx={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-          <Button variant="contained" color="primary" onClick={handleSkip}>
-            Skip Task
-          </Button>
-          <Button variant="contained" color="primary" onClick={handleSubmit}>
-            Submit Task
-          </Button>
-        </Box>
-
-        {/* Progress Bar */}
-        <Box sx={{ marginTop: "25px" }}>
-          <Typography variant="body2" sx={{ marginBottom: "5px" }}>
-            Progress: {currentIndex + 1} / {questions.length}
+          <div>
+          <Typography variant="h6" sx={{ fontWeight: "bold", marginBottom: "5px", textAlign:"center" }}>
+            Task Evaluation
           </Typography>
-          <LinearProgress variant="determinate" value={progress} sx={{ height: "5px" }} />
-        </Box>
-
-        {showError && (
-          <Typography color="error" sx={{ marginTop: "2px" }}>
-            Please complete all fields before submitting.
+          </div>
+          {/* Faithfulness Section */}
+          <div>
+          <Typography variant="body1" sx={{ marginBottom: "4px" }}>
+            Do you think the response is faithful?
           </Typography>
-        )}
-      </Box>
-    </Container>
+          <Box sx={{ display: "flex", justifyContent: "center", gap: "4px", marginBottom: "10px" }}>
+            <Button
+              variant={inputs.isFaithful === true ? "contained" : "outlined"}
+              color="primary"
+              onClick={() => handleInputChange("isFaithful", true)}
+            >
+              True
+            </Button>
+            <Button
+              variant={inputs.isFaithful === false ? "contained" : "outlined"}
+              color="primary"
+              onClick={() => handleInputChange("isFaithful", false)}
+            >
+              False
+            </Button>
+          </Box>
+          </div>
+          {/* Relevance Section */}
+          <div>
+          <Typography variant="body1" sx={{ marginBottom: "4px" }}>
+            Do you think the response is relevant?
+          </Typography>
+          <Box sx={{ display: "flex", justifyContent: "center", gap: "4px", marginBottom: "15px" }}>
+            <Button
+              variant={inputs.isRelevant === true ? "contained" : "outlined"}
+              color="primary"
+              onClick={() => handleInputChange("isRelevant", true)}
+            >
+              True
+            </Button>
+            <Button
+              variant={inputs.isRelevant === false ? "contained" : "outlined"}
+              color="primary"
+              onClick={() => handleInputChange("isRelevant", false)}
+            >
+              False
+            </Button>
+          </Box>
+          </div>
+          {/* Faithfulness Input */}
+          <div>
+          <Box sx={{ marginBottom: "10px" }}>
+            <TextField
+              label="Reasoning for Faithfulness Rating"
+              placeholder="Copy-paste the piece of text from the response that supports your faithfulness rating"
+              multiline
+              rows={4}
+              fullWidth
+              variant="outlined"
+              value={inputs.faithfulness}
+              onChange={(e) => handleInputChange("faithfulness", e.target.value)}
+              InputProps={{
+                style: {
+                  padding: "12px", // Adjust padding
+                },
+              }}
+            />
+          </Box>
+          </div>
+          {/* Relevance Input */}
+          <div>
+          <Box sx={{ marginBottom: "10px" }}>
+            <TextField
+              label="Reasoning for Relevance Rating"
+              placeholder="Copy-paste the piece of text from the response that supports your relevance rating"
+              multiline
+              rows={4}
+              fullWidth
+              variant="outlined"
+              value={inputs.relevance}
+              onChange={(e) => handleInputChange("relevance", e.target.value)}
+              InputProps={{
+                style: {
+                  padding: "12px", // Adjust padding
+                },
+              }}
+            />
+          </Box>
+          </div>
+          {/* Comments Input */}
+          <div>
+          <Box sx={{ marginBottom: "10px" }}>
+            <TextField
+              label="Comments (optional)"
+              multiline
+              rows={5}
+              fullWidth
+              variant="outlined"
+              value={inputs.comments}
+              onChange={(e) => handleInputChange("comments", e.target.value)}
+              InputProps={{
+                style: {
+                  padding: "12px", // Adjust padding
+                },
+              }}
+            />
+          </Box>
+          </div>
+          {/* Buttons */}
+          <div>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: "5px" }}>
+            <Button variant="contained" color="primary" onClick={handleSkip}>
+              Skip Task
+            </Button>
+            <Button variant="contained" color="primary" onClick={handleSubmit}>
+              Submit Task
+            </Button>
+          </Box>
+          </div>
+          {/* Progress */}
+          <div>
+          <Box sx={{ marginTop: "10px" }}>
+            <Typography variant="body2" sx={{ marginBottom: "2px" }}>
+              Progress: {currentIndex + 1} / {questions.length}
+            </Typography>
+            <LinearProgress variant="determinate" value={progress} sx={{ height: "8px" }} />
+          </Box>
+          </div>
+          <div>
+          {showError && (
+            <Typography color="error" sx={{ marginTop: "2px" }}>
+              Please complete all fields before submitting.
+            </Typography>
+          )} 
+          </div>
+        </Box>
+    </div>
+    <div class="content">
+    <QuestionPanel
+        query={questions[currentIndex].query}
+        context={questions[currentIndex].context}
+        response={questions[currentIndex].response}
+    />
+    </div>
+</body>
   );
 };
 

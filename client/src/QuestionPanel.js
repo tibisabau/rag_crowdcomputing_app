@@ -6,20 +6,18 @@ const QuestionPanel = ({ query, context, response }) => {
   return (
     <Box
       sx={{
-        padding: "16px",
+        padding: "2px",
         backgroundColor: "#f9f9f9",
-        // Reduce the top margin to account for the fixed header height
-        marginTop: "120px",
       }}
     >
       {/* Query Section */}
       <Box
         sx={{
           backgroundColor: "#ffffff",
-          padding: "16px",
-          borderRadius: "8px",
-          marginBottom: "16px",
-          border: "1px solid #ddd"
+          padding: "2%",
+          borderRadius: "1vh",
+          marginBottom: "2%",
+          border: "0.2vh solid #ddd",
         }}
       >
         <Typography variant="h6" sx={{ fontWeight: "bold", color: "#333" }}>
@@ -34,10 +32,10 @@ const QuestionPanel = ({ query, context, response }) => {
       <Box
         sx={{
           backgroundColor: "#e8f5e9", // Light green for context
-          padding: "16px",
-          borderRadius: "8px",
-          marginBottom: "16px",
-          border: "1px solid #ddd"
+          padding: "2%",
+          borderRadius: "1vh",
+          marginBottom: "2%",
+          border: "0.2vh solid #ddd",
         }}
       >
         <Typography variant="h6" sx={{ fontWeight: "bold", color: "#2e7d32" }}>
@@ -50,10 +48,10 @@ const QuestionPanel = ({ query, context, response }) => {
       <Box
         sx={{
           backgroundColor: "#e3f2fd", // Light blue for response
-          padding: "16px",
-          borderRadius: "8px",
-          marginBottom: "16px",
-          border: "1px solid #ddd"
+          padding: "2%",
+          borderRadius: "1vh",
+          marginBottom: "2%",
+          border: "0.2vh solid #ddd",
         }}
       >
         <Typography variant="h6" sx={{ fontWeight: "bold", color: "#1565c0" }}>

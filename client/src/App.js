@@ -5,6 +5,7 @@ import questionsData from "./tasks.json";
 import qualificationData from "./qualification-tasks.json";
 import qualificationAnswersCorrect from "./qualification-answers.json";
 import './App.css';
+import introductionStages from "./Introduction";
 
 const App = () => {
   const [questions, setQuestions] = useState([]);
@@ -19,7 +20,20 @@ const App = () => {
   });
   const [showError, setShowError] = useState(false);
   const [qualificationComplete, setQualificationComplete] = useState(false);
+  const [introductionStage, setIntroductionStage] = useState(0)
   const [sidebarTitle, setSidebarTitle] = useState("");
+
+
+  const doIntroduction = (stage) => {
+    return (
+        <div className="content">
+          {introductionStages[stage][0]}
+          <Button variant="contained" color="primary" onClick={
+            () => {setIntroductionStage(stage + 1)}
+          }>{introductionStages[stage][1]}</Button>
+        </div>
+    )
+  }
 
   const startQualification = () => {
     setSidebarTitle("Qualification Task");
@@ -34,9 +48,14 @@ const App = () => {
   }
 
 
+
   useEffect(() => {
     startQualification();
   }, []);
+
+  if (introductionStage < 4) {
+    return doIntroduction(introductionStage)
+  }
 
   const handleInputChange = (field, value) => {
     setInputs((prev) => ({ ...prev, [field]: value }));

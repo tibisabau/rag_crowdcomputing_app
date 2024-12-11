@@ -53,8 +53,8 @@ const App = () => {
     startQualification();
   }, []);
 
-  if (introductionStage < 4) {
-    return doIntroduction(introductionStage)
+  if (introductionStage < introductionStages.length) {
+    return doIntroduction(introductionStage);
   }
 
   const handleInputChange = (field, value) => {
@@ -155,7 +155,9 @@ const App = () => {
     let buttonFunction;
     if (!qualificationComplete) {
       if (reviewQualificationAnswers()) {
-        message = "You successfully completed the qualification test. You can now start the real tasks.";
+        message = "You successfully completed the qualification test. You can now start the real tasks. " +
+            "Please do not provide random answers or educated guesses. " +
+            "Doing so will invalidate your answers and impact you reward";
         buttonText = "Start Tasks";
         buttonFunction = endQualification;
       } else {

@@ -144,6 +144,15 @@ const App = () => {
     startMainTasks();
   }
 
+  const resetQualification = () => {
+    setQuestions([]);
+    setCurrentIndex(0);
+    setTaskAnswers([]);
+    resetFields();
+    setIntroductionStage(2)
+    startQualification()
+  }
+
   if (questions.length === 0) {
     return <Typography variant="h6">Loading questions...</Typography>;
   }
@@ -161,8 +170,10 @@ const App = () => {
         buttonText = "Start Tasks";
         buttonFunction = endQualification;
       } else {
-        message = "You failed the qualification test.";
+        message = "You failed the qualification test." +
+            " You may only start the real tasks once the qualification has been completed successfully.";
         buttonText = "Try Again";
+        buttonFunction = resetQualification
       }
     } else {
       message = "Thank you for completing the survey!";

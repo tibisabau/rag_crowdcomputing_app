@@ -1,0 +1,32 @@
+[
+  {
+    "id": "Q1",
+    "query": "What are the most common symptoms of COVID?",
+    "context": "Coronavirus disease 2019 (COVID-19) is a contagious disease caused by the coronavirus SARS-CoV-2. The disease spread worldwide, resulting in the COVID-19 pandemic. \nThe symptoms of COVID‑19 are variable but often include fever,[7] fatigue, cough, breathing difficulties, loss of smell, and loss of taste.[8][9][10] Symptoms may begin one to fourteen days after exposure to the virus. ",
+    "response": "Common symptoms of COVID-19 are fever, fatigue, cough, breathing difficulties, loss of smell, and loss of taste."
+  },
+  {
+    "id": "Q2",
+    "query": "What was the name of the first Roman emperor?",
+    "context": "Over de vroege geschiedenis van Rome is vrijwel niets met zekerheid bekend. Pas in de derde eeuw voor Christus werd een begin gemaakt met geschiedschrijving, maar dat gebeurde vooral door de Romeinen zelf en is daarom niet volledig betrouwbaar. Op het gebied van oorlogsvoering worden de Punische oorlogen geroemd, die de republiek voerde met haar rivaal Carthago. De invloed van de Romeinen op de grondgebieden die ze overheersten is echter veel breder en interessanter dan oorlogsvoering alleen. Deze reikt van bestuurlijke inrichting, staatsrechtelijke besluitvorming, regelgeving en rechtspraak, tot bouwkunde, landbouwtechniek, veehouderij, onderwijs, nijverheid en voedselbereiding. Deze onderwerpen zijn in het navolgende (nog) niet belicht. Dat behandelt slechts de deelterreinen oorlogen, machtsstrijd en belangrijkste heersers.[2]\n\nDe eerste keizer was Augustus (27 v.Chr. - 14 n.Chr.). Constantijn de Grote (306 - 337) was de eerste keizer die zich tot het christendom bekeerde. Hij verplaatste de hoofdstad naar Constantinopel. Al eerder was het rijk om diverse redenen door keizer Diocletianus administratief gesplitst in een westelijk en oostelijk deel. Tegen het jaar 400 was dit een feitelijke verdeling geworden in een West-Romeins rijk en Oost-Romeins rijk. ",
+    "response": "Emperors of the Roman Empire include Augustus, Constantine the Great, and Diocletian. Constantine is famous for being the first emperor to convert to Christianity."
+  },
+  {
+    "id": "Q3",
+    "query": "Is \"Holland\" or \"the Netherlands\" the correct name for the country?",
+    "context": "The term Holland has frequently been used informally to refer to the whole of the modern country of the Netherlands in various languages,[34] including Dutch[35][36] and English. In some languages, Holland is used as the formal name for the Netherlands. However, Holland is a region within the Netherlands that consists of the two provinces of North and South Holland. Formerly these were a single province, and earlier the County of Holland, which included parts of present-day Utrecht. The emphasis on Holland during the formation of the Dutch Republic, the Eighty Years' War, and the Anglo-Dutch Wars in the 16th, 17th, and 18th centuries, made Holland a pars pro toto for the entire country.",
+    "response": "The Netherlands,[j] informally Holland, is a country in Northwestern Europe, with overseas territories in the Caribbean. It is the largest of the four constituent countries of the Kingdom of the Netherlands.[13] The Netherlands consists of twelve provinces; it borders Germany to the east and Belgium to the south, with a North Sea coastline to the north and west. It shares maritime borders with the United Kingdom, Germany, and Belgium.[14] The official language is Dutch, with West Frisian as a secondary official language in the province of Friesland.[1] Dutch, English, and Papiamento are official in the Caribbean territories.[1] "
+  },
+  {
+    "id": "Q4",
+    "query": "What is the Java language?",
+    "context": "Java is a high-level, class-based, object-oriented programming language that is designed to have as few implementation dependencies as possible. It is a general-purpose programming language intended to let programmers write once, run anywhere (WORA),[16] meaning that compiled Java code can run on all platforms that support Java without the need to recompile.[17] Java applications are typically compiled to bytecode that can run on any Java virtual machine (JVM) regardless of the underlying computer architecture. The syntax of Java is similar to C and C++, but has fewer low-level facilities than either of them. The Java runtime provides dynamic capabilities (such as reflection and runtime code modification) that are typically not available in traditional compiled languages. " ,
+    "response": "Java is a programming language that follows the object-oriented programming paradigm. It is one of the most popular programming languages among developers."
+  },
+  {
+    "id": "Q5",
+    "query": "How big is the London metro system?",
+    "context": "The London Underground (also known simply as the Underground or as the Tube) is a rapid transit system serving Greater London and some parts of the adjacent home counties of Buckinghamshire, Essex and Hertfordshire in England.[5]\n\nThe Underground has its origins in the Metropolitan Railway, opening on 10 January 1863 as the world's first underground passenger railway.[6] The Metropolitan is now part of the Circle, District, Hammersmith & City and Metropolitan lines. The first line to operate underground electric traction trains, the City & South London Railway in 1890, is now part of the Northern line.[7]\n\nThe network has expanded to 11 lines with 250 miles (400 km) of track.[8] However, the Underground does not cover most southern parts of Greater London; there are only 33 Underground stations south of the River Thames.[9] The system's 272 stations collectively accommodate up to 5million passenger journeys a day.[10] In 2023/24 it was used for 1.181billion passenger journeys. ",
+    "response": "The London Underground has a total length of 250 miles or 400 kilometers. It consists of a total of 11 lines and 272 stations."
+  }
+]

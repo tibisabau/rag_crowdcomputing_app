@@ -166,7 +166,7 @@ const App = () => {
       if (reviewQualificationAnswers()) {
         message = "You successfully completed the qualification test. You can now start the real tasks. " +
             "Please do not provide random answers or educated guesses. " +
-            "Doing so will invalidate your answers and impact you reward";
+            "Doing so will invalidate your answers and impact your reward";
         buttonText = "Start Tasks";
         buttonFunction = endQualification;
       } else {

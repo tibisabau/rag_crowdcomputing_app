@@ -239,7 +239,7 @@ const introductionStages = [
             However, it is not faithful because it contains information that is not in the context
             (Paris is the largest city in Europe). Because the response contains information that is not in the context,
             it also introduces a faction mistake: Paris is in fact not the largest city in Europe.
-            However, even if this were correct, we would still say the response is unfaithfull,
+            However, even if this were correct, we would still say the response is unfaithful,
             because the information is not in the context.
             <br/>
             <br/>

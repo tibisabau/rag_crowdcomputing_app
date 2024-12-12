@@ -2,7 +2,10 @@ import React, { useState, useEffect } from "react";
 import QuestionPanel from "./QuestionPanel";
 import { Container, Typography, Button, Box, LinearProgress, TextField } from "@mui/material";
 import questionsData from "./tasks.json";
+import qualificationData from "./qualification-tasks.json";
+import qualificationAnswersCorrect from "./qualification-answers.json";
 import './App.css';
+import introductionStages from "./Introduction";
 
 const App = () => {
   const [questions, setQuestions] = useState([]);
@@ -16,11 +19,43 @@ const App = () => {
     isRelevant: null,
   });
   const [showError, setShowError] = useState(false);
+  const [qualificationComplete, setQualificationComplete] = useState(false);
+  const [introductionStage, setIntroductionStage] = useState(0)
+  const [sidebarTitle, setSidebarTitle] = useState("");
 
-  useEffect(() => {
+
+  const doIntroduction = (stage) => {
+    return (
+        <div className="content">
+          {introductionStages[stage][0]}
+          <Button variant="contained" color="primary" onClick={
+            () => {setIntroductionStage(stage + 1)}
+          }>{introductionStages[stage][1]}</Button>
+        </div>
+    )
+  }
+
+  const startQualification = () => {
+    setSidebarTitle("Qualification Task");
+    const shuffledQuestions = qualificationData.sort(() => Math.random() - 0.5);
+    setQuestions(shuffledQuestions);
+  }
+
+  const startMainTasks = () => {
+    setSidebarTitle("Evaluation Task");
     const shuffledQuestions = questionsData.sort(() => Math.random() - 0.5).slice(0, 5);
     setQuestions(shuffledQuestions);
+  }
+
+
+
+  useEffect(() => {
+    startQualification();
   }, []);
+
+  if (introductionStage < introductionStages.length) {
+    return doIntroduction(introductionStage);
+  }
 
   const handleInputChange = (field, value) => {
     setInputs((prev) => ({ ...prev, [field]: value }));
@@ -74,35 +109,121 @@ const App = () => {
     URL.revokeObjectURL(url);
   };
 
+  /**
+   * Checks if the worker answered the qualification questions correctly.
+   * An answer is correct if they selected the correct relevance and faithfulness,
+   * and if they're reasoning contains at least one of the keywords, but not the entire response.
+   * @returns true if all answers are correct.
+   */
+  const reviewQualificationAnswers = () => {
+    let numberCorrect = 0;
+    for (let i= 0; i<qualificationAnswersCorrect.length; i++) {
+      let correctAnswer = qualificationAnswersCorrect[i];
+      let userAnswer = taskAnswers.filter((x) => x.questionId === correctAnswer.id)[0];
+      if (correctAnswer.faithfulness === userAnswer.isFaithful && correctAnswer.relevance === userAnswer.isRelevant) {
+        for (let j= 0; j<correctAnswer.keywords.length; j++) {
+          let keyword = correctAnswer.keywords[j];
+          if ((userAnswer.faithfulness.includes(keyword) || userAnswer.relevance.includes(keyword))
+              && userAnswer.faithfulness.length < correctAnswer.response.length - 3
+              && userAnswer.relevance.length < correctAnswer.response.length - 3) {
+            numberCorrect++;
+            break;
+          }
+        }
+      }
+    }
+    return numberCorrect === qualificationAnswersCorrect.length;
+  }
+
+  const endQualification = () => {
+    setQuestions([]);
+    setCurrentIndex(0);
+    setTaskAnswers([]);
+    resetFields();
+    setQualificationComplete(true);
+    startMainTasks();
+  }
+
+  const resetQualification = () => {
+    setQuestions([]);
+    setCurrentIndex(0);
+    setTaskAnswers([]);
+    resetFields();
+    setIntroductionStage(2)
+    startQualification()
+  }
+
   if (questions.length === 0) {
     return <Typography variant="h6">Loading questions...</Typography>;
   }
 
+  // Decide what happens when all tasks are done
   if (currentIndex >= questions.length) {
+    let message;
+    let buttonText;
+    let buttonFunction;
+    if (!qualificationComplete) {
+      if (reviewQualificationAnswers()) {
+        message = "You successfully completed the qualification test. You can now start the real tasks. " +
+            "Please do not provide random answers or educated guesses. " +
+            "Doing so will invalidate your answers and impact your reward";
+        buttonText = "Start Tasks";
+        buttonFunction = endQualification;
+      } else {
+        message = "You failed the qualification test." +
+            " You may only start the real tasks once the qualification has been completed successfully.";
+        buttonText = "Try Again";
+        buttonFunction = resetQualification
+      }
+    } else {
+      message = "Thank you for completing the survey!";
+      buttonText = "Download Responses";
+      buttonFunction = downloadAnswers;
+    }
     return (
-      <Container
-        maxWidth="md"
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-        }}
-      >
-        <Typography variant="h4" 
-        sx={{ marginBottom: "3vh" }}
+        <Container
+            maxWidth="md"
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100vh",
+            }}
         >
-          Thank you for completing the survey!
-        </Typography>
-        <Button variant="contained" color="primary" onClick={downloadAnswers}>
-          Download Responses
-        </Button>
-      </Container>
+          <Typography variant="h4"
+                      sx={{ marginBottom: "3vh" }}
+          >
+            {message}
+          </Typography>
+          <Button variant="contained" color="primary" onClick={buttonFunction}>
+            {buttonText}
+          </Button>
+        </Container>
     );
+
   }
 
   const progress = ((currentIndex + 1) / questions.length) * 100;
+
+  // Hide the skip button when in the qualification test
+  let buttons;
+  if (qualificationComplete) {
+    buttons = <Box sx={{ display: "flex", flexDirection: "column", gap: "5px" }}>
+      <Button variant="contained" color="primary" onClick={handleSkip}>
+        Skip Task
+      </Button>
+      <Button variant="contained" color="primary" onClick={handleSubmit}>
+        Submit Task
+      </Button>
+    </Box>
+  } else {
+    buttons = <Box sx={{ display: "flex", flexDirection: "column", gap: "5px" }}>
+      <Button variant="contained" color="primary" onClick={handleSubmit}>
+        Submit Task
+      </Button>
+    </Box>
+  }
 
   return (
     <body>
@@ -119,7 +240,7 @@ const App = () => {
         >
           <div>
           <Typography variant="h6" sx={{ fontWeight: "bold", marginBottom: "5px", textAlign:"center" }}>
-            Task Evaluation
+            {sidebarTitle}
           </Typography>
           </div>
           {/* Faithfulness Section */}
@@ -227,14 +348,7 @@ const App = () => {
           </div>
           {/* Buttons */}
           <div>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: "5px" }}>
-            <Button variant="contained" color="primary" onClick={handleSkip}>
-              Skip Task
-            </Button>
-            <Button variant="contained" color="primary" onClick={handleSubmit}>
-              Submit Task
-            </Button>
-          </Box>
+            {buttons}
           </div>
           {/* Progress */}
           <div>

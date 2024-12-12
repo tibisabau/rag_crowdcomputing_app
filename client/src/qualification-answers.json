@@ -1,0 +1,37 @@
+[
+  {
+    "id":  "Q1",
+    "faithfulness":  true,
+    "relevance": true,
+    "keywords": ["symptoms", "fever", "fatigue"],
+    "response": "Common symptoms of COVID-19 are fever, fatigue, cough, breathing difficulties, loss of smell, and loss of taste."
+  },
+  {
+    "id":  "Q2",
+    "faithfulness":  true,
+    "relevance": false,
+    "keywords": ["Constantine"],
+    "response": "Emperors of the Roman Empire include Augustus, Constantine the Great, and Diocletian. Constantine is famous for being the first emperor to convert to Christianity."
+  },
+  {
+    "id":  "Q3",
+    "faithfulness":  false,
+    "relevance": false,
+    "keywords": ["Germany", "Belgium", "Friesland", "Caribbean"],
+    "response": "The Netherlands,[j] informally Holland, is a country in Northwestern Europe, with overseas territories in the Caribbean. It is the largest of the four constituent countries of the Kingdom of the Netherlands.[13] The Netherlands consists of twelve provinces; it borders Germany to the east and Belgium to the south, with a North Sea coastline to the north and west. It shares maritime borders with the United Kingdom, Germany, and Belgium.[14] The official language is Dutch, with West Frisian as a secondary official language in the province of Friesland.[1] Dutch, English, and Papiamento are official in the Caribbean territories.[1] "
+  },
+  {
+    "id":  "Q4",
+    "faithfulness":  false,
+    "relevance": true,
+    "keywords": ["popular"],
+    "response": "Java is a programming language that follows the object-oriented programming paradigm. It is one of the most popular programming languages among developers."
+  },
+  {
+    "id":  "Q5",
+    "faithfulness":  true,
+    "relevance": true,
+    "keywords": ["250", "400"],
+    "response": "The London Underground has a total length of 250 miles or 400 kilometers. It consists of a total of 11 lines and 272 stations."
+  }
+]

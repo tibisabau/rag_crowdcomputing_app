@@ -194,9 +194,10 @@ const introductionStages = [
             <br/>
             <QuestionPanel
                 query={"What is the capital of France?"}
-                context={"Paris is the capital of France. It is the largest city in the country." +
+                context1={"Paris is the capital of France. It is the largest city in the country." +
                     " Paris is famous for the Louvre museum and the Eiffel tower. " +
                     "The Louvre museum is the most visited museum in the world."}
+                context2={null}
                 response={"The capital and largest city of France is Paris."}
             />
             In the example we see a simple query, a context with three facts, and the response.
@@ -230,9 +231,10 @@ const introductionStages = [
             <br/>
             <QuestionPanel
                 query={"What is the capital of France?"}
-                context={"Paris is the capital of France. It is the largest city in the country." +
+                context1={"Paris is the capital of France. It is the largest city in the country." +
                     " Paris is famous for the Louvre museum and the Eiffel tower. " +
                     "The Louvre museum is the most visited museum in the world."}
+                context2={null}
                 response={"The capital of France is Paris. It is the largest city in France and in Europe."}
             />
             Simliar to the previous example, this one is relevant.
@@ -258,9 +260,11 @@ const introductionStages = [
             <br/>
             <QuestionPanel
                 query={"What is the capital of France?"}
-                context={"Paris is the capital of France. It is the largest city in the country." +
+                context1={"Paris is the capital of France. It is the largest city in the country." +
                     " Paris is famous for the Louvre museum and the Eiffel tower. " +
                     "The Louvre museum is the most visited museum in the world."}
+                context2={null}
+
                 response={"The capital of France is Paris. It is famous for the Louvre Museum and the Eiffel tower. " +
                     "The Louvre museum is the most visited museum in the world."}
             />
@@ -287,9 +291,10 @@ const introductionStages = [
             <br/>
             <QuestionPanel
                 query={"What is the capital of France?"}
-                context={"Paris is the capital of France. It is the largest city in the country." +
+                context1={"Paris is the capital of France. It is the largest city in the country." +
                     " Paris is famous for the Louvre museum and the Eiffel tower. " +
                     "The Louvre museum is the most visited museum in the world."}
+                context2={null}
                 response={"Paris, also known as the city of lights, is famous for the Eiffel tower."}
             />
             This response is neither faithful nor relevant.

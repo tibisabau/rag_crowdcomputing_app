@@ -175,7 +175,7 @@ const App = () => {
   if (currentIndex >= questions.length) {
     let message;
     let buttonText;
-    let buttonFunction;
+    let buttonFunction; 
     if (!qualificationComplete) {
       if (reviewQualificationAnswers()) {
         message = "You successfully completed the qualification test. You can now start the real tasks. " +
@@ -383,12 +383,19 @@ const App = () => {
         </Box>
     </div>
     <div class="content">
-    <QuestionPanel
+    {console.log("test")}
+    {questions[currentIndex].context1 ? <QuestionPanel
         query={questions[currentIndex].query}
         context1={questions[currentIndex].context1}
         context2={questions[currentIndex].context2}
         response={questions[currentIndex].response}
-    />
+    /> :
+    <QuestionPanel
+      query={questions[currentIndex].query}
+      context1={questions[currentIndex].context}
+      context2={null}
+      response={questions[currentIndex].response}
+    />}
     </div>
 </body>
   );

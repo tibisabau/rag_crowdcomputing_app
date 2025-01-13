@@ -38,14 +38,25 @@ const QuestionPanel = ({ query, context1, context2, response }) => {
           border: "0.2vh solid #ddd",
         }}
       >
-        <Typography variant="h6" sx={{ fontWeight: "bold", color: "#2e7d32" }}>
-          Context 1:
-        </Typography>
-        <ReactMarkdown>{context1}</ReactMarkdown>
-        <Typography variant="h6" sx={{ fontWeight: "bold", color: "#2e7d32" }}>
-          Context 2:
-        </Typography>
-        <ReactMarkdown>{context2}</ReactMarkdown>
+        {context2 == null ? 
+          <p>
+            <Typography variant="h6" sx={{ fontWeight: "bold", color: "#2e7d32" }}>
+              Context:
+            </Typography>
+            <ReactMarkdown>{context1}</ReactMarkdown>
+            
+            </p> :
+            <p>
+              <Typography variant="h6" sx={{ fontWeight: "bold", color: "#2e7d32" }}>
+                Context 1:
+              </Typography>
+              <ReactMarkdown>{context1}</ReactMarkdown>
+              <Typography variant="h6" sx={{ fontWeight: "bold", color: "#2e7d32" }}>
+                Context 2:
+              </Typography>
+              <ReactMarkdown>{context2}</ReactMarkdown>
+            </p>
+          }
       </Box>
 
       {/* Generated Response Section */}

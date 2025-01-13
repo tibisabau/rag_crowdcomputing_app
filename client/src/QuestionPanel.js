@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Typography } from "@mui/material";
 import ReactMarkdown from "react-markdown";
 
-const QuestionPanel = ({ query, context, response }) => {
+const QuestionPanel = ({ query, context1, context2, response }) => {
   return (
     <Box
       sx={{
@@ -39,9 +39,13 @@ const QuestionPanel = ({ query, context, response }) => {
         }}
       >
         <Typography variant="h6" sx={{ fontWeight: "bold", color: "#2e7d32" }}>
-          Context:
+          Context 1:
         </Typography>
-        <ReactMarkdown>{context}</ReactMarkdown>
+        <ReactMarkdown>{context1}</ReactMarkdown>
+        <Typography variant="h6" sx={{ fontWeight: "bold", color: "#2e7d32" }}>
+          Context 2:
+        </Typography>
+        <ReactMarkdown>{context2}</ReactMarkdown>
       </Box>
 
       {/* Generated Response Section */}

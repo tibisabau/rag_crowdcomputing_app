@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import QuestionPanel from "./QuestionPanel";
 import { Container, Typography, Button, Box, LinearProgress, TextField } from "@mui/material";
-import questionsData from "./tasks.json";
 import qualificationData from "./qualification-tasks.json";
 import qualificationAnswersCorrect from "./qualification-answers.json";
 import './App.css';
@@ -23,6 +22,7 @@ const App = () => {
   const [introductionStage, setIntroductionStage] = useState(0)
   const [sidebarTitle, setSidebarTitle] = useState("");
 
+  const API_URL = "https://cs4145-api-726011437905.europe-west4.run.app";
 
   const doIntroduction = (stage) => {
     return (
@@ -35,15 +35,29 @@ const App = () => {
     )
   }
 
+  const fetchQuestions = async () => {
+    try {
+      const response = await fetch(API_URL + "/questions");
+      if (!response.ok) throw new Error("Failed to fetch questions");
+      const data = await response.json();
+      console.log(data);
+      return data;
+    } catch (error) {
+      console.error("Error fetching questions:", error);
+      return [];
+    }
+  };
+
   const startQualification = () => {
     setSidebarTitle("Qualification Task");
     const shuffledQuestions = qualificationData.sort(() => Math.random() - 0.5);
     setQuestions(shuffledQuestions);
   }
 
-  const startMainTasks = () => {
+  const startMainTasks = async () => {
     setSidebarTitle("Evaluation Task");
-    const shuffledQuestions = questionsData.sort(() => Math.random() - 0.5).slice(0, 5);
+    const data = await fetchQuestions();
+    const shuffledQuestions = data.sort(() => Math.random() - 0.5).slice(0, 10);
     setQuestions(shuffledQuestions);
   }
 
@@ -161,7 +175,7 @@ const App = () => {
   if (currentIndex >= questions.length) {
     let message;
     let buttonText;
-    let buttonFunction;
+    let buttonFunction; 
     if (!qualificationComplete) {
       if (reviewQualificationAnswers()) {
         message = "You successfully completed the qualification test. You can now start the real tasks. " +
@@ -369,11 +383,19 @@ const App = () => {
         </Box>
     </div>
     <div class="content">
-    <QuestionPanel
+    {console.log("test")}
+    {questions[currentIndex].context1 ? <QuestionPanel
         query={questions[currentIndex].query}
-        context={questions[currentIndex].context}
+        context1={questions[currentIndex].context1}
+        context2={questions[currentIndex].context2}
         response={questions[currentIndex].response}
-    />
+    /> :
+    <QuestionPanel
+      query={questions[currentIndex].query}
+      context1={questions[currentIndex].context}
+      context2={null}
+      response={questions[currentIndex].response}
+    />}
     </div>
 </body>
   );

@@ -57,7 +57,7 @@ const App = () => {
   const startMainTasks = async () => {
     setSidebarTitle("Evaluation Task");
     const data = await fetchQuestions();
-    const shuffledQuestions = data.sort(() => Math.random() - 0.5).slice(0, 5);
+    const shuffledQuestions = data.sort(() => Math.random() - 0.5).slice(0, 10);
     setQuestions(shuffledQuestions);
   }
 

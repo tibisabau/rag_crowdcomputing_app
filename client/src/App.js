@@ -7,21 +7,24 @@ import './App.css';
 import introductionStages from "./Introduction";
 
 const App = () => {
-  const [questions, setQuestions] = useState([]);
+  const [questions, setQuestions] = useState(qualificationData.sort(() => Math.random() - 0.5));
   const [currentIndex, setCurrentIndex] = useState(0);
   const [taskAnswers, setTaskAnswers] = useState([]);
   const [inputs, setInputs] = useState({
     faithfulness: "",
     relevance: "",
     comments: "",
-    isFaithful: null,
-    isRelevant: null,
+    is_faithful: null,
+    is_relevant: null,
   });
   const [showError, setShowError] = useState(false);
   const [qualificationComplete, setQualificationComplete] = useState(false);
   const [introductionStage, setIntroductionStage] = useState(0)
   const [sidebarTitle, setSidebarTitle] = useState("");
-
+  const [time, setTime] = useState(0.0);
+  const [workerId, setWorkerId] = useState(-1);
+  const [skips, setSkips] = useState(0);
+  
   const API_URL = "https://cs4145-api-726011437905.europe-west4.run.app";
 
   const doIntroduction = (stage) => {
@@ -47,25 +50,40 @@ const App = () => {
       return [];
     }
   };
-
+  const submitResponse = async (data) => {
+    try {
+      console.log(data);
+      const response = await fetch(API_URL + "/responses", {
+        method: "post",
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+      
+      console.log("send evaluation");
+    }
+    catch (error) {
+      console.error("Error submitting response:", error);
+      return null;
+    }
+  }
   const startQualification = () => {
     setSidebarTitle("Qualification Task");
     const shuffledQuestions = qualificationData.sort(() => Math.random() - 0.5);
     setQuestions(shuffledQuestions);
   }
-
+  
   const startMainTasks = async () => {
     setSidebarTitle("Evaluation Task");
     const data = await fetchQuestions();
     const shuffledQuestions = data.sort(() => Math.random() - 0.5).slice(0, 10);
     setQuestions(shuffledQuestions);
+    
+    const d = new Date(); 
+    setTime(d.getTime());
   }
-
-
-
-  useEffect(() => {
-    startQualification();
-  }, []);
 
   if (introductionStage < introductionStages.length) {
     return doIntroduction(introductionStage);
@@ -84,29 +102,35 @@ const App = () => {
       faithfulness: "",
       relevance: "",
       comments: "",
-      isFaithful: null,
-      isRelevant: null,
+      is_faithful: null,
+      is_relevant: null,
     });
     setShowError(false);
   };
 
   const handleSubmit = () => {
-    const { faithfulness, relevance, isFaithful, isRelevant } = inputs;
-    if (!faithfulness.trim() || !relevance.trim() || isFaithful === null || isRelevant === null) {
+    const { faithfulness, relevance, is_faithful, is_relevant } = inputs;
+    if (!faithfulness.trim() || !relevance.trim() || is_faithful === null || is_relevant === null) {
       setShowError(true);
       return;
     }
-
+    const d = new Date();
     const evaluation = {
-      questionId: questions[currentIndex].id,
+      question_id: questions[currentIndex].id,
       ...inputs,
+      time: d.getTime() - time,
+      worker_id: workerId
     };
+
+    setTime(d.getTime());
+    submitResponse(evaluation);
     setTaskAnswers((prev) => [...prev, evaluation]);
     resetFields();
     handleNext();
   };
 
   const handleSkip = () => {
+    setSkips(skips + 1);
     resetFields();
     setShowError(false);
     handleNext();
@@ -134,7 +158,7 @@ const App = () => {
     for (let i= 0; i<qualificationAnswersCorrect.length; i++) {
       let correctAnswer = qualificationAnswersCorrect[i];
       let userAnswer = taskAnswers.filter((x) => x.questionId === correctAnswer.id)[0];
-      if (correctAnswer.faithfulness === userAnswer.isFaithful && correctAnswer.relevance === userAnswer.isRelevant) {
+      if (correctAnswer.faithfulness === userAnswer.is_faithful && correctAnswer.relevance === userAnswer.is_relevant) {
         for (let j= 0; j<correctAnswer.keywords.length; j++) {
           let keyword = correctAnswer.keywords[j];
           if ((userAnswer.faithfulness.includes(keyword) || userAnswer.relevance.includes(keyword))
@@ -264,16 +288,16 @@ const App = () => {
           </Typography>
           <Box sx={{ display: "flex", justifyContent: "center", gap: "4px", marginBottom: "10px" }}>
             <Button
-              variant={inputs.isFaithful === true ? "contained" : "outlined"}
+              variant={inputs.is_faithful === true ? "contained" : "outlined"}
               color="primary"
-              onClick={() => handleInputChange("isFaithful", true)}
+              onClick={() => handleInputChange("is_faithful", true)}
             >
               True
             </Button>
             <Button
-              variant={inputs.isFaithful === false ? "contained" : "outlined"}
+              variant={inputs.is_faithful === false ? "contained" : "outlined"}
               color="primary"
-              onClick={() => handleInputChange("isFaithful", false)}
+              onClick={() => handleInputChange("is_faithful", false)}
             >
               False
             </Button>
@@ -286,16 +310,16 @@ const App = () => {
           </Typography>
           <Box sx={{ display: "flex", justifyContent: "center", gap: "4px", marginBottom: "15px" }}>
             <Button
-              variant={inputs.isRelevant === true ? "contained" : "outlined"}
+              variant={inputs.is_relevant === true ? "contained" : "outlined"}
               color="primary"
-              onClick={() => handleInputChange("isRelevant", true)}
+              onClick={() => handleInputChange("is_relevant", true)}
             >
               True
             </Button>
             <Button
-              variant={inputs.isRelevant === false ? "contained" : "outlined"}
+              variant={inputs.is_relevant === false ? "contained" : "outlined"}
               color="primary"
-              onClick={() => handleInputChange("isRelevant", false)}
+              onClick={() => handleInputChange("is_relevant", false)}
             >
               False
             </Button>
@@ -383,7 +407,6 @@ const App = () => {
         </Box>
     </div>
     <div class="content">
-    {console.log("test")}
     {questions[currentIndex].context1 ? <QuestionPanel
         query={questions[currentIndex].query}
         context1={questions[currentIndex].context1}

@@ -22,11 +22,10 @@ const App = () => {
   const [introductionStage, setIntroductionStage] = useState(0)
   const [sidebarTitle, setSidebarTitle] = useState("");
   const [counter, setCounter] = useState(0);
-
   const [time, setTime] = useState(0.0);
   const [workerId, setWorkerId] = useState(-1);
   const [skips, setSkips] = useState(0);
-  
+
   const API_URL = "https://cs4145-api-726011437905.europe-west4.run.app";
 
   const doIntroduction = (stage) => {
@@ -40,19 +39,7 @@ const App = () => {
     )
   }
 
-  const fetchQuestions = async () => {
-    try {
-      const response = await fetch(API_URL + "/questions");
-      if (!response.ok) throw new Error("Failed to fetch questions");
-      const data = await response.json();
-      console.log(data);
-      return data;
-    } catch (error) {
-      console.error("Error fetching questions:", error);
-      return [];
-    }
-  };
-  const submitResponse = async (data) => {
+const submitResponse = async (data) => {
     try {
       console.log(data);
       const response = await fetch(API_URL + "/responses", {
@@ -71,6 +58,20 @@ const App = () => {
       return null;
     }
   }
+
+  const fetchQuestions = async () => {
+    try {
+      const response = await fetch(API_URL + "/questions");
+      if (!response.ok) throw new Error("Failed to fetch questions");
+      const data = await response.json();
+      console.log(data);
+      return data;
+    } catch (error) {
+      console.error("Error fetching questions:", error);
+      return [];
+    }
+  };
+
   const startQualification = () => {
     setSidebarTitle("Qualification Task");
     const shuffledQuestions = qualificationData.sort(() => Math.random() - 0.5);
@@ -103,6 +104,12 @@ const App = () => {
     //should use post request
     setCounter(16); // Triggers useEffect
   };
+
+
+
+  useEffect(() => {
+    startQualification();
+  }, []);
 
   if (introductionStage < introductionStages.length) {
     return doIntroduction(introductionStage);
@@ -140,7 +147,6 @@ const App = () => {
       time: d.getTime() - time,
       worker_id: workerId
     };
-
     setTime(d.getTime());
     submitResponse(evaluation);
     setTaskAnswers((prev) => [...prev, evaluation]);
@@ -176,7 +182,7 @@ const App = () => {
     let numberCorrect = 0;
     for (let i= 0; i<qualificationAnswersCorrect.length; i++) {
       let correctAnswer = qualificationAnswersCorrect[i];
-      let userAnswer = taskAnswers.filter((x) => x.questionId === correctAnswer.id)[0];
+      let userAnswer = taskAnswers.filter((x) => x.question_id === correctAnswer.id)[0];
       if (correctAnswer.faithfulness === userAnswer.is_faithful && correctAnswer.relevance === userAnswer.is_relevant) {
         for (let j= 0; j<correctAnswer.keywords.length; j++) {
           let keyword = correctAnswer.keywords[j];
@@ -426,6 +432,7 @@ const App = () => {
         </Box>
     </div>
     <div class="content">
+    {console.log("test")}
     {questions[currentIndex].context1 ? <QuestionPanel
         query={questions[currentIndex].query}
         context1={questions[currentIndex].context1}

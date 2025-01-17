@@ -21,6 +21,7 @@ const App = () => {
   const [qualificationComplete, setQualificationComplete] = useState(false);
   const [introductionStage, setIntroductionStage] = useState(0)
   const [sidebarTitle, setSidebarTitle] = useState("");
+  const [counter, setCounter] = useState(0);
 
   const API_URL = "https://cs4145-api-726011437905.europe-west4.run.app";
 
@@ -54,12 +55,30 @@ const App = () => {
     setQuestions(shuffledQuestions);
   }
 
+  useEffect(() => {
+    const fetchAndSetQuestions = async () => {
+      //get counter somewhere here
+      const data = await fetchQuestions();
+      const effectiveCounter = ((counter - 1) % 15) + 1; // Assuming 15 (3 * 5) is the range to repeat
+      const startIndex = Math.floor((effectiveCounter - 1) / 3) * 10;
+      const endIndex = startIndex + 10;
+      const shuffledQuestions = data.slice(0, 50).slice(startIndex, endIndex);
+      console.log(startIndex);
+      console.log(endIndex);
+      console.log(counter); // counter will be the updated value
+      setQuestions(shuffledQuestions);
+    };
+    
+    if (counter > 0) { // Ensure counter is set before fetching
+      fetchAndSetQuestions();
+    }
+  }, [counter]); // Runs whenever counter changes
+  
   const startMainTasks = async () => {
     setSidebarTitle("Evaluation Task");
-    const data = await fetchQuestions();
-    const shuffledQuestions = data.sort(() => Math.random() - 0.5).slice(0, 10);
-    setQuestions(shuffledQuestions);
-  }
+    //should use post request
+    setCounter(16); // Triggers useEffect
+  };
 
 
 
@@ -130,6 +149,7 @@ const App = () => {
    * @returns true if all answers are correct.
    */
   const reviewQualificationAnswers = () => {
+    return true;
     let numberCorrect = 0;
     for (let i= 0; i<qualificationAnswersCorrect.length; i++) {
       let correctAnswer = qualificationAnswersCorrect[i];

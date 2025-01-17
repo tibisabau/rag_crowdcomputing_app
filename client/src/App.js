@@ -7,7 +7,7 @@ import './App.css';
 import introductionStages from "./Introduction";
 
 const App = () => {
-  const [questions, setQuestions] = useState(qualificationData.sort(() => Math.random() - 0.5));
+  const [questions, setQuestions] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [taskAnswers, setTaskAnswers] = useState([]);
   const [inputs, setInputs] = useState({

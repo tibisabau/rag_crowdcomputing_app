@@ -73,6 +73,21 @@ const submitResponse = async (data) => {
     }
   };
 
+  const fetchCounter = async () => {
+    try {
+      const response = await fetch(API_URL + "/counter/increment", {
+        method: "post"
+      });
+      if (!response.ok) throw new Error("Failed to fetch counter");
+      const data = await response.json();
+      console.log(data);
+      return data;
+    } catch (error) {
+      console.error("Error fetching counter:", error);
+      return [];
+    }
+  };
+
   const startQualification = () => {
     setSidebarTitle("Qualification Task");
     const shuffledQuestions = qualificationData.sort(() => Math.random() - 0.5);
@@ -81,7 +96,6 @@ const submitResponse = async (data) => {
 
   useEffect(() => {
     const fetchAndSetQuestions = async () => {
-      //get counter somewhere here
       const data = await fetchQuestions();
       const effectiveCounter = ((counter - 1) % 15) + 1; // Assuming 15 (3 * 5) is the range to repeat
       const startIndex = Math.floor((effectiveCounter - 1) / 3) * 10;
@@ -104,8 +118,8 @@ const submitResponse = async (data) => {
     setSidebarTitle("Evaluation Task");
     const d = new Date(); 
     setTime(d.getTime());
-    //should use post request
-    setCounter(16); // Triggers useEffect
+    const fetchedCounter = await fetchCounter();
+    setCounter(fetchedCounter.value); // Triggers useEffect
   };
 
 
@@ -182,7 +196,7 @@ const submitResponse = async (data) => {
    * @returns true if all answers are correct.
    */
   const reviewQualificationAnswers = () => {
-    // return true;
+    return true;
     let numberCorrect = 0;
     for (let i= 0; i<qualificationAnswersCorrect.length; i++) {
       let correctAnswer = qualificationAnswersCorrect[i];

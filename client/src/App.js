@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import QuestionPanel from "./QuestionPanel";
 import { Container, Typography, Button, Box, LinearProgress, TextField } from "@mui/material";
 import qualificationData from "./qualification-tasks.json";
+import goldStandard from "./gold-standard-question.json"
 import qualificationAnswersCorrect from "./qualification-answers.json";
 import './App.css';
 import introductionStages from "./Introduction";
@@ -85,7 +86,9 @@ const submitResponse = async (data) => {
       const effectiveCounter = ((counter - 1) % 15) + 1; // Assuming 15 (3 * 5) is the range to repeat
       const startIndex = Math.floor((effectiveCounter - 1) / 3) * 10;
       const endIndex = startIndex + 10;
-      const shuffledQuestions = data.slice(0, 50).slice(startIndex, endIndex);
+      var shuffledQuestions = data.slice(0, 50).slice(startIndex, endIndex);
+      shuffledQuestions.push(goldStandard);
+      console.log(shuffledQuestions);
       console.log(startIndex);
       console.log(endIndex);
       console.log(counter); // counter will be the updated value
@@ -179,6 +182,7 @@ const submitResponse = async (data) => {
    * @returns true if all answers are correct.
    */
   const reviewQualificationAnswers = () => {
+    // return true;
     let numberCorrect = 0;
     for (let i= 0; i<qualificationAnswersCorrect.length; i++) {
       let correctAnswer = qualificationAnswersCorrect[i];

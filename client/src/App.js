@@ -24,6 +24,7 @@ const App = () => {
   const [sidebarTitle, setSidebarTitle] = useState("");
   const [counter, setCounter] = useState(0);
   const [time, setTime] = useState(0.0);
+  
   const [workerId, setWorkerId] = useState(-1);
   const [skips, setSkips] = useState(0);
 
@@ -122,7 +123,20 @@ const submitResponse = async (data) => {
     setCounter(fetchedCounter.value); // Triggers useEffect
   };
 
+  useEffect(() => {
+    // Get the URL query string
+    const urlParams = new URLSearchParams(window.location.search);
 
+    // Extract PROLIFIC_PID from the URL
+    const prolificId = urlParams.get('PROLIFIC_PID');
+
+    // Set the workerId if the ID exists, else default to -1
+    if (prolificId) {
+      setWorkerId(prolificId);
+    } else {
+      setWorkerId(-1);
+    }
+  }, []);
 
   useEffect(() => {
     startQualification();

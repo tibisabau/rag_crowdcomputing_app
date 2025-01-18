@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import QuestionPanel from "./QuestionPanel";
 import { Container, Typography, Button, Box, LinearProgress, TextField } from "@mui/material";
 import qualificationData from "./qualification-tasks.json";
+import goldStandard from "./gold-standard-question.json"
 import qualificationAnswersCorrect from "./qualification-answers.json";
 import './App.css';
 import introductionStages from "./Introduction";
@@ -14,13 +15,18 @@ const App = () => {
     faithfulness: "",
     relevance: "",
     comments: "",
-    isFaithful: null,
-    isRelevant: null,
+    is_faithful: null,
+    is_relevant: null,
   });
   const [showError, setShowError] = useState(false);
   const [qualificationComplete, setQualificationComplete] = useState(false);
   const [introductionStage, setIntroductionStage] = useState(0)
   const [sidebarTitle, setSidebarTitle] = useState("");
+  const [counter, setCounter] = useState(0);
+  const [time, setTime] = useState(0.0);
+  
+  const [workerId, setWorkerId] = useState(-1);
+  const [skips, setSkips] = useState(0);
 
   const API_URL = "https://cs4145-api-726011437905.europe-west4.run.app";
 
@@ -33,6 +39,26 @@ const App = () => {
           }>{introductionStages[stage][1]}</Button>
         </div>
     )
+  }
+
+const submitResponse = async (data) => {
+    try {
+      console.log(data);
+      const response = await fetch(API_URL + "/responses", {
+        method: "post",
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+      
+      console.log("send evaluation");
+    }
+    catch (error) {
+      console.error("Error submitting response:", error);
+      return null;
+    }
   }
 
   const fetchQuestions = async () => {
@@ -48,20 +74,69 @@ const App = () => {
     }
   };
 
+  const fetchCounter = async () => {
+    try {
+      const response = await fetch(API_URL + "/counter/increment", {
+        method: "post"
+      });
+      if (!response.ok) throw new Error("Failed to fetch counter");
+      const data = await response.json();
+      console.log(data);
+      return data;
+    } catch (error) {
+      console.error("Error fetching counter:", error);
+      return [];
+    }
+  };
+
   const startQualification = () => {
     setSidebarTitle("Qualification Task");
     const shuffledQuestions = qualificationData.sort(() => Math.random() - 0.5);
     setQuestions(shuffledQuestions);
   }
 
+  useEffect(() => {
+    const fetchAndSetQuestions = async () => {
+      const data = await fetchQuestions();
+      const effectiveCounter = ((counter - 1) % 15) + 1; // Assuming 15 (3 * 5) is the range to repeat
+      const startIndex = Math.floor((effectiveCounter - 1) / 3) * 10;
+      const endIndex = startIndex + 10;
+      var shuffledQuestions = data.slice(0, 50).slice(startIndex, endIndex);
+      shuffledQuestions.push(goldStandard);
+      console.log(shuffledQuestions);
+      console.log(startIndex);
+      console.log(endIndex);
+      console.log(counter); // counter will be the updated value
+      setQuestions(shuffledQuestions);
+    };
+    
+    if (counter > 0) { // Ensure counter is set before fetching
+      fetchAndSetQuestions();
+    }
+  }, [counter]); // Runs whenever counter changes
+  
   const startMainTasks = async () => {
     setSidebarTitle("Evaluation Task");
-    const data = await fetchQuestions();
-    const shuffledQuestions = data.sort(() => Math.random() - 0.5).slice(0, 10);
-    setQuestions(shuffledQuestions);
-  }
+    const d = new Date(); 
+    setTime(d.getTime());
+    const fetchedCounter = await fetchCounter();
+    setCounter(fetchedCounter.value); // Triggers useEffect
+  };
 
+  useEffect(() => {
+    // Get the URL query string
+    const urlParams = new URLSearchParams(window.location.search);
 
+    // Extract PROLIFIC_PID from the URL
+    const prolificId = urlParams.get('PROLIFIC_PID');
+
+    // Set the workerId if the ID exists, else default to -1
+    if (prolificId) {
+      setWorkerId(prolificId);
+    } else {
+      setWorkerId(-1);
+    }
+  }, []);
 
   useEffect(() => {
     startQualification();
@@ -84,29 +159,34 @@ const App = () => {
       faithfulness: "",
       relevance: "",
       comments: "",
-      isFaithful: null,
-      isRelevant: null,
+      is_faithful: null,
+      is_relevant: null,
     });
     setShowError(false);
   };
 
   const handleSubmit = () => {
-    const { faithfulness, relevance, isFaithful, isRelevant } = inputs;
-    if (!faithfulness.trim() || !relevance.trim() || isFaithful === null || isRelevant === null) {
+    const { faithfulness, relevance, is_faithful, is_relevant } = inputs;
+    if (!faithfulness.trim() || !relevance.trim() || is_faithful === null || is_relevant === null) {
       setShowError(true);
       return;
     }
-
+    const d = new Date();
     const evaluation = {
-      questionId: questions[currentIndex].id,
+      question_id: questions[currentIndex].id,
       ...inputs,
+      time: d.getTime() - time,
+      worker_id: workerId
     };
+    setTime(d.getTime());
+    submitResponse(evaluation);
     setTaskAnswers((prev) => [...prev, evaluation]);
     resetFields();
     handleNext();
   };
 
   const handleSkip = () => {
+    setSkips(skips + 1);
     resetFields();
     setShowError(false);
     handleNext();
@@ -130,11 +210,12 @@ const App = () => {
    * @returns true if all answers are correct.
    */
   const reviewQualificationAnswers = () => {
+    // return true;
     let numberCorrect = 0;
     for (let i= 0; i<qualificationAnswersCorrect.length; i++) {
       let correctAnswer = qualificationAnswersCorrect[i];
-      let userAnswer = taskAnswers.filter((x) => x.questionId === correctAnswer.id)[0];
-      if (correctAnswer.faithfulness === userAnswer.isFaithful && correctAnswer.relevance === userAnswer.isRelevant) {
+      let userAnswer = taskAnswers.filter((x) => x.question_id === correctAnswer.id)[0];
+      if (correctAnswer.faithfulness === userAnswer.is_faithful && correctAnswer.relevance === userAnswer.is_relevant) {
         for (let j= 0; j<correctAnswer.keywords.length; j++) {
           let keyword = correctAnswer.keywords[j];
           if ((userAnswer.faithfulness.includes(keyword) || userAnswer.relevance.includes(keyword))
@@ -190,7 +271,9 @@ const App = () => {
         buttonFunction = resetQualification
       }
     } else {
-      message = "Thank you for completing the survey!";
+      message = "Thank you for completing the survey! " +
+          "You should enter the following completion code on Prolific " +
+          "(make sure you copy it before closing this page): C1LMX4R6";
       buttonText = "Download Responses";
       buttonFunction = downloadAnswers;
     }
@@ -264,16 +347,16 @@ const App = () => {
           </Typography>
           <Box sx={{ display: "flex", justifyContent: "center", gap: "4px", marginBottom: "10px" }}>
             <Button
-              variant={inputs.isFaithful === true ? "contained" : "outlined"}
+              variant={inputs.is_faithful === true ? "contained" : "outlined"}
               color="primary"
-              onClick={() => handleInputChange("isFaithful", true)}
+              onClick={() => handleInputChange("is_faithful", true)}
             >
               True
             </Button>
             <Button
-              variant={inputs.isFaithful === false ? "contained" : "outlined"}
+              variant={inputs.is_faithful === false ? "contained" : "outlined"}
               color="primary"
-              onClick={() => handleInputChange("isFaithful", false)}
+              onClick={() => handleInputChange("is_faithful", false)}
             >
               False
             </Button>
@@ -286,16 +369,16 @@ const App = () => {
           </Typography>
           <Box sx={{ display: "flex", justifyContent: "center", gap: "4px", marginBottom: "15px" }}>
             <Button
-              variant={inputs.isRelevant === true ? "contained" : "outlined"}
+              variant={inputs.is_relevant === true ? "contained" : "outlined"}
               color="primary"
-              onClick={() => handleInputChange("isRelevant", true)}
+              onClick={() => handleInputChange("is_relevant", true)}
             >
               True
             </Button>
             <Button
-              variant={inputs.isRelevant === false ? "contained" : "outlined"}
+              variant={inputs.is_relevant === false ? "contained" : "outlined"}
               color="primary"
-              onClick={() => handleInputChange("isRelevant", false)}
+              onClick={() => handleInputChange("is_relevant", false)}
             >
               False
             </Button>

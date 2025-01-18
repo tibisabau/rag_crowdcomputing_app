@@ -196,7 +196,7 @@ const submitResponse = async (data) => {
    * @returns true if all answers are correct.
    */
   const reviewQualificationAnswers = () => {
-    return true;
+    // return true;
     let numberCorrect = 0;
     for (let i= 0; i<qualificationAnswersCorrect.length; i++) {
       let correctAnswer = qualificationAnswersCorrect[i];

@@ -192,17 +192,6 @@ const submitResponse = async (data) => {
     handleNext();
   };
 
-  const downloadAnswers = () => {
-    const dataStr = JSON.stringify(taskAnswers, null, 2);
-    const blob = new Blob([dataStr], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.download = `survey_answers_${new Date().toISOString()}.json`;
-    link.href = url;
-    link.click();
-    URL.revokeObjectURL(url);
-  };
-
   /**
    * Checks if the worker answered the qualification questions correctly.
    * An answer is correct if they selected the correct relevance and faithfulness,
@@ -274,8 +263,8 @@ const submitResponse = async (data) => {
       message = "Thank you for completing the survey! " +
           "You should enter the following completion code on Prolific " +
           "(make sure you copy it before closing this page): C1LMX4R6";
-      buttonText = "Download Responses";
-      buttonFunction = downloadAnswers;
+      buttonText = null;
+      buttonFunction = null;
     }
     return (
         <Container
@@ -293,9 +282,11 @@ const submitResponse = async (data) => {
           >
             {message}
           </Typography>
-          <Button variant="contained" color="primary" onClick={buttonFunction}>
-            {buttonText}
-          </Button>
+          {buttonText && buttonFunction && (
+            <Button variant="contained" color="primary" onClick={buttonFunction}>
+              {buttonText}
+            </Button>
+          )}
         </Container>
     );
 

@@ -19,7 +19,7 @@ const introductionStages = [
             <br/>
             <b>No prior knowledge</b> of or experience with RAG chatbots is <b>required</b>.
             The specific RAG model that participants will be evaluating deals with questions
-            posed by medial professionals. However, no medical knowledge is needed to complete the tasks.
+            posed by medical professionals. However, no medical knowledge is needed to complete the tasks.
             <br/>
             <br/>
             On the other hand, we do believe that completing the tasks will be easier and faster when participants
@@ -30,8 +30,8 @@ const introductionStages = [
             <br/>
             In the task, the queries and responses are in English.
             However, the information that the RAG chatbot cites as its source is mostly in Dutch.
-            Therefore, <b>proficiency of Dutch <u>and</u> English is required to participate</b>.
-            If you Dutch is not you first language and you do not have significant experience
+            Therefore, <b>proficiency in Dutch <u>and</u> English is required to participate</b>.
+            If Dutch is not your first language and you do not have significant experience
             with reading more complex Dutch texts, then you cannot complete the tasks.
             Similarly, if your first language is Dutch, but you struggle with English,
             then it will not be possible for you to participate.
@@ -40,10 +40,10 @@ const introductionStages = [
             <Typography variant="h4">Background</Typography>
             This survey is part of larger research into improving human trust in conversational artificial intelligence,
             specifically in the domain of healthcare. Artificial intelligence can be a very powerful tool that can help
-            both medical professionals and patients find reliable information faster and in a more user friendly way.
+            both medical professionals and patients find reliable information faster and in a more user-friendly way.
             A common pitfall of AI tools is that they sometimes respond with incorrect information
             or do not answer the question completely.
-            Obviously, this is far from ideal for a tools that needs to provide medical information.
+            Obviously, this is far from ideal for a tool that needs to provide medical information.
             That is why this research investigates methods to improve these
             conversational AI tools aimed at the medical sector.
             <br/>
@@ -62,15 +62,15 @@ const introductionStages = [
             For this training, we need evaluations of the responses,
             i.e. we need to know if the response is good or bad.
             Obtaining these evaluations can be cumbersome for a large amount of responses.
-            Usually, evaluations are obtained automatically by having a different AI tools look at them.
+            Usually, evaluations are obtained automatically by having separate AI tools look at them.
             While these automatic evaluations are decently accurate, they can differ from evaluations made by humans.
             To improve RAG search, we are interested in how accurate automatic evaluations are to human evaluations
-            and how the might differ. Therefore, we have created this survey to obtain some human RAG search evaluations.
+            and how they might differ. Therefore, we have created this survey to obtain some human RAG search evaluations.
             <br/>
             <br/>
             <Typography variant="h4">Your task</Typography>
-            We will present you with an number of queries asked to a RAG search tool.
-            Your task is to determine if the response to each query good or not given the information
+            We will present you with a number of queries asked to a RAG search tool.
+            Your task is to determine if the response to each query is good or not given the information
             that the tool has retrieved.
             We will ask you to score this based on two metrics, namely Faithfulness and Relevance.
             A response is faithful when it matches the information that was retrieved.
@@ -82,9 +82,9 @@ const introductionStages = [
             <br/>
             <br/>
             For each set of a query, a context (the retrieved information),
-            and the response you have to indicate if the response is faithful or not and if it is relevant or not.
+            and the response, you have to indicate if the response is faithful or not and if it is relevant or not.
             Additionally, you have to provide a motivation for these two ratings by copying the part
-            of the response which you base your reasoning on and pasting it if the provided field.
+            of the response which you base your reasoning on and pasting it into the provided field.
             <br/>
             <br/>
             If you are interested in participating, click continue.
@@ -109,7 +109,7 @@ const introductionStages = [
             The specific goal of this survey is obtain human evaluations of RAG search responses.
             In this survey, you will be presented with the details of a RAG search query relating to medical questions
             and asked to evaluate the response based on two metrics.
-            In total, this will take up about 30-90 minutes of your time.
+            In total, this will take up between 20-60 minutes of your time.
             <br/>
             <br/>
             By participating in this study, you contribute to making AI more trustworthy.
@@ -120,9 +120,9 @@ const introductionStages = [
             or if you skip a significant portion of the tasks.
             <br/>
             <br/>
-            All data that is collected trough your participation is stored <b>completely anonymous</b>.
+            All data that is collected through your participation is stored <b>completely anonymous</b>.
             That is, the only thing that is stored are the responses you fill in.
-            No personal data relating to you or you Prolific account is required or stored.
+            No personal data relating to you or your Prolific account is required or stored.
             There will be no questions relating to your personal situation or experiences.
             Therefore, the stored data can in no way be traced back to you.
             For this reason, it is not possible to request for your answers to be deleted.
@@ -148,7 +148,7 @@ const introductionStages = [
             <br/>
             <br/>
             By clicking the button below, I acknowledge that I have read and understood the information presented above
-            dated 11-12-2024
+            dated January 2025
             and that I am aware of the described risks, and I consent voluntarily to be a participant in this research
             and to the described use of the data I submit.
         </p>
@@ -169,16 +169,24 @@ const introductionStages = [
             <br/>
             <br/>
             A response is <b>faithful</b> when it matches the information that was retrieved.
-            This has noting to do with if it is true or not, just that the response only contains facts that are
+            This has nothing to do with if it is true or not, just that the response only contains facts that are
             also in the retrieved information. For example, when a response is a good answer to the query and everything
             in the response is true, but the response contains <b>information that was not in the context</b>,
             we say that the response is <b><u>not</u> faithful</b>.
             <br/>
             <br/>
+            The context is often split into two pieces of text that the RAG model took into consideration
+            when generating its response. For the response to be evaluated as faithful, it is enough for it
+            to contain information from <b>at least one of those two context-snippets</b>. Therefore, read
+            through both context-pieces, use the relevant one to evaluate the response's faithfulness, and
+            ignore whichever context-piece is not informative. Of course, if the response does not match the
+            information in either of the two context-snippets, then it is not faithful.
+            <br/>
+            <br/>
             A response is <b>relevant</b> if it answers the user's question (the query) and doesn't go off topic.
             This has nothing to do with factual mistakes or the exact retrieved information,
             just that the response suits the query.
-            For example, when a response is a good summary of the context, but is does not answer the question,
+            For example, when a response is a good summary of the context, but it does not answer the question,
             we say that the response is <b><u>not</u> relevant</b>.
             Furthermore, when a response is a good summary of the context and it <b>answers the question</b>,
             but it also <b>contains a lot more information that is not related</b> to the query,
@@ -240,7 +248,7 @@ const introductionStages = [
             Simliar to the previous example, this one is relevant.
             However, it is not faithful because it contains information that is not in the context
             (Paris is the largest city in Europe). Because the response contains information that is not in the context,
-            it also introduces a faction mistake: Paris is in fact not the largest city in Europe.
+            it also introduces a factual mistake: Paris is in fact not the largest city in Europe.
             However, even if this were correct, we would still say the response is unfaithful,
             because the information is not in the context.
             <br/>
@@ -251,7 +259,7 @@ const introductionStages = [
             <br/>
             Relevant: True
             <br/>
-            Motivation for Faithfulness:  It is the largest city in in Europe.
+            Motivation for Faithfulness: It is the largest city in in Europe.
             <br/>
             Motivation for Relevance: The capital of France is Paris.
             <br/>
@@ -280,10 +288,10 @@ const introductionStages = [
             <br/>
             Relevant: False
             <br/>
-            Motivation for Faithfulness:  The capital of France is Paris.  Louvre Museum and the Eiffel tower.
+            Motivation for Faithfulness: The capital of France is Paris. Louvre Museum and the Eiffel tower.
             Louvre museum is the most visited museum in the world.
             <br/>
-            Motivation for Relevance:  Louvre Museum and the Eiffel tower. Louvre museum is the most visited museum
+            Motivation for Relevance: Louvre Museum and the Eiffel tower. Louvre museum is the most visited museum
             in the world.
             <br/>
             <br/>
@@ -311,25 +319,25 @@ const introductionStages = [
             <br/>
             Relevant: False
             <br/>
-            Motivation for Faithfulness:  also known as the city of lights
+            Motivation for Faithfulness: also known as the city of lights
             <br/>
-            Motivation for Relevance:  also known as the city of lights, is famous for the Eiffel tower.
+            Motivation for Relevance: also known as the city of lights, is famous for the Eiffel tower.
             <br/>
             <br/>
             <br/>
             <Typography variant="h4">A practical note</Typography>
             <br/>
             All of these examples are fairly simple to illustrate the meanings of faithfulness and relevance.
-            Please be aware that the responses in the real tasks can be much longer than this.
+            Please be aware that the responses in the real tasks can be longer than this.
             A long response does not necessarily mean that it is not relevant.
             Every sentence can still relate to the query.
             The contexts are usually also longer. You must read the context carefully before deciding
             if a response if faithful or not:
             the response can paraphrase information from the context.
             Finally, faithfulness and relevance are often not as black and white as in these examples.
-            Read everything carefully. If you are in doubt it is better to answer not relevant or not faithful,
+            Read everything carefully. If you are in doubt, it is better to answer not relevant or not faithful,
             because for a good response these things should be clear.
-            If you are really not sure if something counts as relevant or not you can skip a task.
+            If you are really not sure if something counts as relevant or not, you can skip a task.
             However, do note that skipping too many tasks will affect your reward,
             as we do not consider the survey completed when a significant part of the tasks are left unanswered.
             <br/>

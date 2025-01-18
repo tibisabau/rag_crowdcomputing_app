@@ -271,7 +271,9 @@ const submitResponse = async (data) => {
         buttonFunction = resetQualification
       }
     } else {
-      message = "Thank you for completing the survey!";
+      message = "Thank you for completing the survey! " +
+          "You should enter the following completion code on Prolific " +
+          "(make sure you copy it before closing this page): C1LMX4R6";
       buttonText = "Download Responses";
       buttonFunction = downloadAnswers;
     }

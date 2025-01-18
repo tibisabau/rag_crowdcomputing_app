@@ -216,7 +216,7 @@ const submitResponse = async (data) => {
         }
       }
     }
-    return numberCorrect === qualificationAnswersCorrect.length;
+    return numberCorrect >= 3;
   }
 
   const endQualification = () => {

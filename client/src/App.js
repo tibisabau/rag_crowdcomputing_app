@@ -26,7 +26,7 @@ const App = () => {
   const [time, setTime] = useState(0.0);
   
   const [workerId, setWorkerId] = useState(-1);
-  const [skips, setSkips] = useState(0);
+  // const [skips, setSkips] = useState(0);
 
   const API_URL = "https://cs4145-api-726011437905.europe-west4.run.app";
 
@@ -53,7 +53,7 @@ const submitResponse = async (data) => {
         body: JSON.stringify(data)
       });
       
-      console.log("send evaluation");
+      // console.log("send evaluation");
     }
     catch (error) {
       console.error("Error submitting response:", error);
@@ -99,13 +99,13 @@ const submitResponse = async (data) => {
     const fetchAndSetQuestions = async () => {
       const data = await fetchQuestions();
       const effectiveCounter = ((counter - 1) % 15) + 1; // Assuming 15 (3 * 5) is the range to repeat
-      const startIndex = Math.floor((effectiveCounter - 1) / 3) * 10;
-      const endIndex = startIndex + 10;
-      var shuffledQuestions = data.slice(0, 50).slice(startIndex, endIndex);
+      const startIndex = Math.floor((effectiveCounter - 1) / 3) * 5;
+      const endIndex = startIndex + 5;
+      var shuffledQuestions = data.slice(0, 25).slice(startIndex, endIndex);
       shuffledQuestions.push(goldStandard);
-      console.log(shuffledQuestions);
-      console.log(startIndex);
-      console.log(endIndex);
+      // console.log(shuffledQuestions);
+      console.log("start" + startIndex);
+      console.log("end" + endIndex);
       console.log(counter); // counter will be the updated value
       setQuestions(shuffledQuestions);
     };
@@ -185,12 +185,12 @@ const submitResponse = async (data) => {
     handleNext();
   };
 
-  const handleSkip = () => {
-    setSkips(skips + 1);
-    resetFields();
-    setShowError(false);
-    handleNext();
-  };
+  // const handleSkip = () => {
+  //   setSkips(skips + 1);
+  //   resetFields();
+  //   setShowError(false);
+  //   handleNext();
+  // };
 
   /**
    * Checks if the worker answered the qualification questions correctly.
@@ -199,7 +199,6 @@ const submitResponse = async (data) => {
    * @returns true if all answers are correct.
    */
   const reviewQualificationAnswers = () => {
-    // return true;
     let numberCorrect = 0;
     for (let i= 0; i<qualificationAnswersCorrect.length; i++) {
       let correctAnswer = qualificationAnswersCorrect[i];
@@ -298,9 +297,9 @@ const submitResponse = async (data) => {
   let buttons;
   if (qualificationComplete) {
     buttons = <Box sx={{ display: "flex", flexDirection: "column", gap: "5px" }}>
-      <Button variant="contained" color="primary" onClick={handleSkip}>
+      {/* <Button variant="contained" color="primary" onClick={handleSkip}>
         Skip Task
-      </Button>
+      </Button> */}
       <Button variant="contained" color="primary" onClick={handleSubmit}>
         Submit Task
       </Button>
@@ -457,7 +456,7 @@ const submitResponse = async (data) => {
         </Box>
     </div>
     <div class="content">
-    {console.log("test")}
+    {/* {console.log("test")} */}
     {questions[currentIndex].context1 ? <QuestionPanel
         query={questions[currentIndex].query}
         context1={questions[currentIndex].context1}

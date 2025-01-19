@@ -24,7 +24,7 @@ const App = () => {
   const [sidebarTitle, setSidebarTitle] = useState("");
   const [counter, setCounter] = useState(0);
   const [time, setTime] = useState(0.0);
-  
+
   const [workerId, setWorkerId] = useState(-1);
   // const [skips, setSkips] = useState(0);
 
@@ -32,16 +32,16 @@ const App = () => {
 
   const doIntroduction = (stage) => {
     return (
-        <div className="content">
-          {introductionStages[stage][0]}
-          <Button variant="contained" color="primary" onClick={
-            () => {setIntroductionStage(stage + 1)}
-          }>{introductionStages[stage][1]}</Button>
-        </div>
+      <div className="content">
+        {introductionStages[stage][0]}
+        <Button variant="contained" color="primary" onClick={
+          () => { setIntroductionStage(stage + 1) }
+        }>{introductionStages[stage][1]}</Button>
+      </div>
     )
   }
 
-const submitResponse = async (data) => {
+  const submitResponse = async (data) => {
     try {
       console.log(data);
       const response = await fetch(API_URL + "/responses", {
@@ -52,7 +52,7 @@ const submitResponse = async (data) => {
         },
         body: JSON.stringify(data)
       });
-      
+
       // console.log("send evaluation");
     }
     catch (error) {
@@ -109,15 +109,15 @@ const submitResponse = async (data) => {
       console.log(counter); // counter will be the updated value
       setQuestions(shuffledQuestions);
     };
-    
+
     if (counter > 0) { // Ensure counter is set before fetching
       fetchAndSetQuestions();
     }
   }, [counter]); // Runs whenever counter changes
-  
+
   const startMainTasks = async () => {
     setSidebarTitle("Evaluation Task");
-    const d = new Date(); 
+    const d = new Date();
     setTime(d.getTime());
     const fetchedCounter = await fetchCounter();
     setCounter(fetchedCounter.value); // Triggers useEffect
@@ -199,20 +199,32 @@ const submitResponse = async (data) => {
    * @returns true if all answers are correct.
    */
   const reviewQualificationAnswers = () => {
+    // return true;
     let numberCorrect = 0;
-    for (let i= 0; i<qualificationAnswersCorrect.length; i++) {
+    for (let i = 0; i < qualificationAnswersCorrect.length; i++) {
       let correctAnswer = qualificationAnswersCorrect[i];
       let userAnswer = taskAnswers.filter((x) => x.question_id === correctAnswer.id)[0];
-      if (correctAnswer.faithfulness === userAnswer.is_faithful && correctAnswer.relevance === userAnswer.is_relevant) {
-        for (let j= 0; j<correctAnswer.keywords.length; j++) {
-          let keyword = correctAnswer.keywords[j];
-          if ((userAnswer.faithfulness.includes(keyword) || userAnswer.relevance.includes(keyword))
-              && userAnswer.faithfulness.length < correctAnswer.response.length - 3
-              && userAnswer.relevance.length < correctAnswer.response.length - 3) {
-            numberCorrect++;
-            break;
-          }
+      let points = 0;
+      if (correctAnswer.faithfulness === userAnswer.is_faithful) {
+        points++;
+      }
+
+      // Check relevance
+      if (correctAnswer.relevance === userAnswer.is_relevant) {
+        points++;
+      }
+      for (let j = 0; j < correctAnswer.keywords.length; j++) {
+        let keyword = correctAnswer.keywords[j];
+        if ((userAnswer.faithfulness.includes(keyword) || userAnswer.relevance.includes(keyword))
+          && userAnswer.faithfulness.length < correctAnswer.response.length - 3
+          && userAnswer.relevance.length < correctAnswer.response.length - 3) {
+          points++;
+          break;
         }
+      }
+
+      if (points >= 2) {
+        numberCorrect++;
       }
     }
     return numberCorrect >= 3;
@@ -244,49 +256,49 @@ const submitResponse = async (data) => {
   if (currentIndex >= questions.length) {
     let message;
     let buttonText;
-    let buttonFunction; 
+    let buttonFunction;
     if (!qualificationComplete) {
       if (reviewQualificationAnswers()) {
         message = "You successfully completed the qualification test. You can now start the real tasks. " +
-            "Please do not provide random answers or educated guesses. " +
-            "Doing so will invalidate your answers and impact your reward";
+          "Please do not provide random answers or educated guesses. " +
+          "Doing so will invalidate your answers and impact your reward";
         buttonText = "Start Tasks";
         buttonFunction = endQualification;
       } else {
         message = "You failed the qualification test." +
-            " You may only start the real tasks once the qualification has been completed successfully.";
+          " You may only start the real tasks once the qualification has been completed successfully.";
         buttonText = "Try Again";
         buttonFunction = resetQualification
       }
     } else {
       message = "Thank you for completing the survey! " +
-          "You should enter the following completion code on Prolific " +
-          "(make sure you copy it before closing this page): C1OH4KXC";
+        "You should enter the following completion code on Prolific " +
+        "(make sure you copy it before closing this page): C1OH4KXC";
       buttonText = null;
       buttonFunction = null;
     }
     return (
-        <Container
-            maxWidth="md"
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-              height: "100vh",
-            }}
+      <Container
+        maxWidth="md"
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <Typography variant="h4"
+          sx={{ marginBottom: "3vh" }}
         >
-          <Typography variant="h4"
-                      sx={{ marginBottom: "3vh" }}
-          >
-            {message}
-          </Typography>
-          {buttonText && buttonFunction && (
-            <Button variant="contained" color="primary" onClick={buttonFunction}>
-              {buttonText}
-            </Button>
-          )}
-        </Container>
+          {message}
+        </Typography>
+        {buttonText && buttonFunction && (
+          <Button variant="contained" color="primary" onClick={buttonFunction}>
+            {buttonText}
+          </Button>
+        )}
+      </Container>
     );
 
   }
@@ -314,8 +326,8 @@ const submitResponse = async (data) => {
 
   return (
     <body>
-    <div class="sidebar">
-      {/* Task Evaluation Sidebar */}
+      <div class="sidebar">
+        {/* Task Evaluation Sidebar */}
         <Box
           sx={{
             backgroundColor: "#ffffff",
@@ -326,112 +338,112 @@ const submitResponse = async (data) => {
           }}
         >
           <div>
-          <Typography variant="h6" sx={{ fontWeight: "bold", marginBottom: "5px", textAlign:"center" }}>
-            {sidebarTitle}
-          </Typography>
+            <Typography variant="h6" sx={{ fontWeight: "bold", marginBottom: "5px", textAlign: "center" }}>
+              {sidebarTitle}
+            </Typography>
           </div>
           {/* Faithfulness Section */}
           <div>
-          <Typography variant="body1" sx={{ marginBottom: "4px" }}>
-            Do you think the response is faithful?
-          </Typography>
-          <Box sx={{ display: "flex", justifyContent: "center", gap: "4px", marginBottom: "10px" }}>
-            <Button
-              variant={inputs.is_faithful === true ? "contained" : "outlined"}
-              color="primary"
-              onClick={() => handleInputChange("is_faithful", true)}
-            >
-              True
-            </Button>
-            <Button
-              variant={inputs.is_faithful === false ? "contained" : "outlined"}
-              color="primary"
-              onClick={() => handleInputChange("is_faithful", false)}
-            >
-              False
-            </Button>
-          </Box>
+            <Typography variant="body1" sx={{ marginBottom: "4px" }}>
+              Do you think the response is faithful?
+            </Typography>
+            <Box sx={{ display: "flex", justifyContent: "center", gap: "4px", marginBottom: "10px" }}>
+              <Button
+                variant={inputs.is_faithful === true ? "contained" : "outlined"}
+                color="primary"
+                onClick={() => handleInputChange("is_faithful", true)}
+              >
+                True
+              </Button>
+              <Button
+                variant={inputs.is_faithful === false ? "contained" : "outlined"}
+                color="primary"
+                onClick={() => handleInputChange("is_faithful", false)}
+              >
+                False
+              </Button>
+            </Box>
           </div>
           {/* Relevance Section */}
           <div>
-          <Typography variant="body1" sx={{ marginBottom: "4px" }}>
-            Do you think the response is relevant?
-          </Typography>
-          <Box sx={{ display: "flex", justifyContent: "center", gap: "4px", marginBottom: "15px" }}>
-            <Button
-              variant={inputs.is_relevant === true ? "contained" : "outlined"}
-              color="primary"
-              onClick={() => handleInputChange("is_relevant", true)}
-            >
-              True
-            </Button>
-            <Button
-              variant={inputs.is_relevant === false ? "contained" : "outlined"}
-              color="primary"
-              onClick={() => handleInputChange("is_relevant", false)}
-            >
-              False
-            </Button>
-          </Box>
+            <Typography variant="body1" sx={{ marginBottom: "4px" }}>
+              Do you think the response is relevant?
+            </Typography>
+            <Box sx={{ display: "flex", justifyContent: "center", gap: "4px", marginBottom: "15px" }}>
+              <Button
+                variant={inputs.is_relevant === true ? "contained" : "outlined"}
+                color="primary"
+                onClick={() => handleInputChange("is_relevant", true)}
+              >
+                True
+              </Button>
+              <Button
+                variant={inputs.is_relevant === false ? "contained" : "outlined"}
+                color="primary"
+                onClick={() => handleInputChange("is_relevant", false)}
+              >
+                False
+              </Button>
+            </Box>
           </div>
           {/* Faithfulness Input */}
           <div>
-          <Box sx={{ marginBottom: "10px" }}>
-            <TextField
-              label="Reasoning for Faithfulness Rating"
-              placeholder="Copy-paste the piece of text from the response that supports your faithfulness rating"
-              multiline
-              rows={4}
-              fullWidth
-              variant="outlined"
-              value={inputs.faithfulness}
-              onChange={(e) => handleInputChange("faithfulness", e.target.value)}
-              InputProps={{
-                style: {
-                  padding: "12px", // Adjust padding
-                },
-              }}
-            />
-          </Box>
+            <Box sx={{ marginBottom: "10px" }}>
+              <TextField
+                label="Reasoning for Faithfulness Rating"
+                placeholder="Copy-paste the piece of text from the response that supports your faithfulness rating"
+                multiline
+                rows={4}
+                fullWidth
+                variant="outlined"
+                value={inputs.faithfulness}
+                onChange={(e) => handleInputChange("faithfulness", e.target.value)}
+                InputProps={{
+                  style: {
+                    padding: "12px", // Adjust padding
+                  },
+                }}
+              />
+            </Box>
           </div>
           {/* Relevance Input */}
           <div>
-          <Box sx={{ marginBottom: "10px" }}>
-            <TextField
-              label="Reasoning for Relevance Rating"
-              placeholder="Copy-paste the piece of text from the response that supports your relevance rating"
-              multiline
-              rows={4}
-              fullWidth
-              variant="outlined"
-              value={inputs.relevance}
-              onChange={(e) => handleInputChange("relevance", e.target.value)}
-              InputProps={{
-                style: {
-                  padding: "12px", // Adjust padding
-                },
-              }}
-            />
-          </Box>
+            <Box sx={{ marginBottom: "10px" }}>
+              <TextField
+                label="Reasoning for Relevance Rating"
+                placeholder="Copy-paste the piece of text from the response that supports your relevance rating"
+                multiline
+                rows={4}
+                fullWidth
+                variant="outlined"
+                value={inputs.relevance}
+                onChange={(e) => handleInputChange("relevance", e.target.value)}
+                InputProps={{
+                  style: {
+                    padding: "12px", // Adjust padding
+                  },
+                }}
+              />
+            </Box>
           </div>
           {/* Comments Input */}
           <div>
-          <Box sx={{ marginBottom: "10px" }}>
-            <TextField
-              label="Comments (optional)"
-              multiline
-              rows={5}
-              fullWidth
-              variant="outlined"
-              value={inputs.comments}
-              onChange={(e) => handleInputChange("comments", e.target.value)}
-              InputProps={{
-                style: {
-                  padding: "12px", // Adjust padding
-                },
-              }}
-            />
-          </Box>
+            <Box sx={{ marginBottom: "10px" }}>
+              <TextField
+                label="Comments (optional)"
+                multiline
+                rows={5}
+                fullWidth
+                variant="outlined"
+                value={inputs.comments}
+                onChange={(e) => handleInputChange("comments", e.target.value)}
+                InputProps={{
+                  style: {
+                    padding: "12px", // Adjust padding
+                  },
+                }}
+              />
+            </Box>
           </div>
           {/* Buttons */}
           <div>
@@ -439,38 +451,38 @@ const submitResponse = async (data) => {
           </div>
           {/* Progress */}
           <div>
-          <Box sx={{ marginTop: "10px" }}>
-            <Typography variant="body2" sx={{ marginBottom: "2px" }}>
-              Progress: {currentIndex + 1} / {questions.length}
-            </Typography>
-            <LinearProgress variant="determinate" value={progress} sx={{ height: "8px" }} />
-          </Box>
+            <Box sx={{ marginTop: "10px" }}>
+              <Typography variant="body2" sx={{ marginBottom: "2px" }}>
+                Progress: {currentIndex + 1} / {questions.length}
+              </Typography>
+              <LinearProgress variant="determinate" value={progress} sx={{ height: "8px" }} />
+            </Box>
           </div>
           <div>
-          {showError && (
-            <Typography color="error" sx={{ marginTop: "2px" }}>
-              Please complete all fields before submitting.
-            </Typography>
-          )} 
+            {showError && (
+              <Typography color="error" sx={{ marginTop: "2px" }}>
+                Please complete all fields before submitting.
+              </Typography>
+            )}
           </div>
         </Box>
-    </div>
-    <div class="content">
-    {/* {console.log("test")} */}
-    {questions[currentIndex].context1 ? <QuestionPanel
-        query={questions[currentIndex].query}
-        context1={questions[currentIndex].context1}
-        context2={questions[currentIndex].context2}
-        response={questions[currentIndex].response}
-    /> :
-    <QuestionPanel
-      query={questions[currentIndex].query}
-      context1={questions[currentIndex].context}
-      context2={null}
-      response={questions[currentIndex].response}
-    />}
-    </div>
-</body>
+      </div>
+      <div class="content">
+        {/* {console.log("test")} */}
+        {questions[currentIndex].context1 ? <QuestionPanel
+          query={questions[currentIndex].query}
+          context1={questions[currentIndex].context1}
+          context2={questions[currentIndex].context2}
+          response={questions[currentIndex].response}
+        /> :
+          <QuestionPanel
+            query={questions[currentIndex].query}
+            context1={questions[currentIndex].context}
+            context2={null}
+            response={questions[currentIndex].response}
+          />}
+      </div>
+    </body>
   );
 };
 

@@ -199,35 +199,7 @@ const App = () => {
    * @returns true if all answers are correct.
    */
   const reviewQualificationAnswers = () => {
-    // return true;
-    let numberCorrect = 0;
-    for (let i = 0; i < qualificationAnswersCorrect.length; i++) {
-      let correctAnswer = qualificationAnswersCorrect[i];
-      let userAnswer = taskAnswers.filter((x) => x.question_id === correctAnswer.id)[0];
-      let points = 0;
-      if (correctAnswer.faithfulness === userAnswer.is_faithful) {
-        points++;
-      }
-
-      // Check relevance
-      if (correctAnswer.relevance === userAnswer.is_relevant) {
-        points++;
-      }
-      for (let j = 0; j < correctAnswer.keywords.length; j++) {
-        let keyword = correctAnswer.keywords[j];
-        if ((userAnswer.faithfulness.includes(keyword) || userAnswer.relevance.includes(keyword))
-          && userAnswer.faithfulness.length < correctAnswer.response.length - 3
-          && userAnswer.relevance.length < correctAnswer.response.length - 3) {
-          points++;
-          break;
-        }
-      }
-
-      if (points >= 2) {
-        numberCorrect++;
-      }
-    }
-    return numberCorrect >= 3;
+    return true;
   }
 
   const endQualification = () => {

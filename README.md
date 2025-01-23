@@ -1,10 +1,11 @@
-# Getting Started with Create React App
+# Evaluation of RAG Search Performance (CS4145, Group 3, Frontend)
+RAG (Retrieval-Augmented Generation) Search is an Artificial Intelligence technique that combines the natural language capabilities of Large Language Models (LLMs) with the functionality of information retrieval systems, such as traditional search engines. The aim of such RAG models is to provide more accurate and factually supported answers to the questions of users.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+However, the performance of these models is itself evaluated automatically using a separate LLM as obtaining human evaluations is often deemed too costly. This raises the issue of unwarranted trust in conversational AI and begs the question how a human's judgement would differ from that of the LLM. Exploring this question is precisely the goal of our research, for which we created this system to collect human evaluations of RAG Search responses.
 
 ## Available Scripts
 
-In the project directory, you can run:
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app). In the project directory, you can run:
 
 ### `npm start`
 
